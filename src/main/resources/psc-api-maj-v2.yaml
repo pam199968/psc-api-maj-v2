@@ -1,0 +1,1062 @@
+openapi: 3.0.0
+info:
+  title: psc-api-maj-v2
+  version: '1.0'
+servers:
+  - url: 'http://localhost:3000/api'
+tags:
+  - name: ps
+    description: ps
+  - name: psref
+    description: psref
+  - name: profession
+    description: profession
+  - name: workSituation
+    description: workSituation
+  - name: expertise
+    description: expertise
+  - name: structure
+    description: structure
+paths:
+  /v1/ps:
+    parameters: [ ]
+    get:
+      summary: Get All Ps
+      tags: [ 'ps']
+      responses:
+        '200':
+          description: Ps all found
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Ps'
+        '404':
+          description: Ps not Found
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      operationId: get-all-ps
+      description: Retrieve the information of all the Ps.
+    post:
+      summary: ''
+      tags: [ 'ps' ]
+      operationId: create-new-Ps
+      responses:
+        '201':
+          description: Created
+        '409':
+          description: Ps already exists
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      description: Create a new Ps
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Ps'
+        required: true
+        description: The Ps to be created
+    put:
+      summary: ''
+      tags: [ 'ps' ]
+      operationId: store-or-update
+      responses:
+        '201':
+          description: Created
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      description: Try store then update if exists
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Ps'
+        required: true
+  '/v1/ps/{psId}':
+    parameters:
+      - schema:
+          type: string
+        name: psId
+        in: path
+        required: true
+    get:
+      summary: ''
+      tags: [ 'ps' ]
+      operationId: get-ps-by-id
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Ps'
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      description: get a Ps by one of its idNationalRef
+    put:
+      summary: ''
+      tags: [ 'ps' ]
+      operationId: update-ps-by-id
+      responses:
+        '200':
+          description: OK
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      description: Update a Ps by its id
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Ps'
+        required: true
+        description: ''
+    delete:
+      summary: ''
+      tags: [ 'ps' ]
+      operationId: delete-ps-by-id
+      responses:
+        '204':
+          description: No Content
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      description: Delet a PS by its id
+  /v1/ps/force:
+    post:
+      summary: ''
+      tags: [ 'ps' ]
+      operationId: ps-force-create
+      responses:
+        '200':
+          description: OK
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      description: Store a new PS or fully replace an existing one
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Ps'
+        required: true
+  '/v1/ps/force/{psId}':
+    parameters:
+      - schema:
+          type: string
+        name: psId
+        in: path
+        required: true
+    delete:
+      summary: ''
+      tags: [ 'ps' ]
+      operationId: force-delete-ps-by-id
+      responses:
+        '204':
+          description: No Content
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      description: completely delete Ps (not only deactivate it)
+  /v1/psref:
+    get:
+      summary: Your GET endpoint
+      tags: [ 'psref' ]
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PsRef'
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      operationId: get-all-psref
+      description: Get all PsRef
+    post:
+      summary: ''
+      tags: [ 'psref' ]
+      operationId: post-psref
+      responses:
+        '201':
+          description: Created
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                type: object
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      description: create new PsRef
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PsRef'
+        required: true
+  '/v1/psref/{psrefId}':
+    parameters:
+      - schema:
+          type: string
+        name: psrefId
+        in: path
+        required: true
+    get:
+      summary: Your GET endpoint
+      tags: [ 'psref' ]
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PsRef'
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      operationId: get-psref-by-id
+      description: Get PsRef by nationalIdRef
+    put:
+      summary: ''
+      tags: [ 'psref' ]
+      operationId: update-psRef-by-id
+      responses:
+        '200':
+          description: OK
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      description: Update PsRef
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PsRef'
+        required: true
+    delete:
+      summary: ''
+      tags: [ 'psref' ]
+      operationId: delete-psRef-by-id
+      responses:
+        '204':
+          description: No Content
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      description: Delete PsRef
+  '/v1/ps/{psId}/professions':
+    parameters:
+      - schema:
+          type: string
+        name: psId
+        in: path
+        required: true
+    get:
+      summary: Your GET endpoint
+      tags: [ 'psref' ]
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Profession'
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      operationId: get-all-professions-by-ps
+      description: Get all professions by ps
+    post:
+      summary: ''
+      tags: [ 'profession' ]
+      operationId: create-new-profession
+      responses:
+        '201':
+          description: Created
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                type: object
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      description: Cretae a new profession
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Profession'
+        required: true
+  '/v1/ps/{psId}/professions/{exProId}':
+    parameters:
+      - schema:
+          type: string
+        name: psId
+        in: path
+        required: true
+      - schema:
+          type: string
+        name: exProId
+        in: path
+        required: true
+    get:
+      summary: Your GET endpoint
+      tags: [ 'profession' ]
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Profession'
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      operationId: get-profession-by-exProId
+      description: Get profession by exProId
+    put:
+      summary: ''
+      tags: [ 'profession' ]
+      operationId: update-profession-by-ids-exProId
+      responses:
+        '200':
+          description: OK
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      description: Update profession by Id
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Profession'
+        required: true
+        description: ''
+    delete:
+      summary: ''
+      tags: [ 'profession' ]
+      operationId: delete-profession-by-exProId
+      responses:
+        '204':
+          description: No Content
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      description: Delete profession by exProId
+  '/v1/ps/{psId}/professions/{exProId}/expertises':
+    parameters:
+      - schema:
+          type: string
+        name: psId
+        in: path
+        required: true
+      - schema:
+          type: string
+        name: exProId
+        in: path
+        required: true
+    get:
+      summary: Your GET endpoint
+      tags: [ 'expertise' ]
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Expertise'
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      operationId: get-all-expertises-by-ps-and-exPro
+      description: Get all expertises by Ps and exProId
+    post:
+      summary: ''
+      tags: [ 'expertise' ]
+      operationId: post-expertise-for-Ps-and-exProId
+      responses:
+        '201':
+          description: Created
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                type: object
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      description: Create expertise for Ps and exPro
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Expertise'
+        required: true
+  '/v1/ps/{psId}/professions/{exProId}/expertises/{expertiseId}':
+    parameters:
+      - schema:
+          type: string
+        name: psId
+        in: path
+        required: true
+      - schema:
+          type: string
+        name: exProId
+        in: path
+        required: true
+      - schema:
+          type: string
+        name: expertiseId
+        in: path
+        required: true
+    get:
+      summary: Your GET endpoint
+      tags: [ 'expertise' ]
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Expertise'
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      operationId: get-expertise-by-expertiseId
+      description: Get expertise by expertiseId
+    put:
+      summary: ''
+      tags: [ 'expertise' ]
+      operationId: update-expertise-by-expertiseId
+      responses:
+        '200':
+          description: OK
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      description: Update expertise by expertiseId
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Expertise'
+        required: true
+    delete:
+      summary: ''
+      tags: [ 'expertise' ]
+      operationId: delete-expertise-by-expertiseId
+      responses:
+        '204':
+          description: No Content
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      description: Delete expertise by expertiseId
+  '/v1/ps/{psId}/professions/{exProId}/situations':
+    parameters:
+      - schema:
+          type: string
+        name: psId
+        in: path
+        required: true
+      - schema:
+          type: string
+        name: exProId
+        in: path
+        required: true
+    get:
+      summary: Your GET endpoint
+      tags: [ 'workSituation' ]
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/WorkSituation'
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      operationId: get-all-workSituations-for-ps-and-exProId
+      description: Get all workSituations for Ps and exProId
+    post:
+      summary: ''
+      tags: [ 'workSituation' ]
+      operationId: create-new-workSituation-for-ps-and-exProId
+      responses:
+        '201':
+          description: Created
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                type: object
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      description: Create new workSituation for Ps and exProId
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WorkSituation'
+        required: true
+        description: ''
+  '/v1/ps/{psId}/professions/{exProId}/situations/{situId}':
+    parameters:
+      - schema:
+          type: string
+        name: psId
+        in: path
+        required: true
+      - schema:
+          type: string
+        name: exProId
+        in: path
+        required: true
+      - schema:
+          type: string
+        name: situId
+        in: path
+        required: true
+    get:
+      summary: Your GET endpoint
+      tags: [ 'workSituation' ]
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WorkSituation'
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      operationId: get-workSituation-by-situId
+      description: Get workSituation by situId
+    put:
+      summary: ''
+      tags: [ 'workSituation' ]
+      operationId: update-workSituation-by-situId
+      responses:
+        '200':
+          description: OK
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      description: Update workSituation by situId
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WorkSituation'
+        required: true
+    delete:
+      summary: ''
+      tags: [ 'workSituation' ]
+      operationId: delete-workSituation-by-situId
+      responses:
+        '204':
+          description: No Content
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      description: Delete workSituation by situId
+  /v1/structures:
+    get:
+      summary: Your GET endpoint
+      tags: [ 'structure' ]
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Structure'
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      operationId: get-all-structures
+      description: Get all structures
+    post:
+      summary: ''
+      tags: [ 'structure' ]
+      operationId: create-new-structure
+      responses:
+        '201':
+          description: Created
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                type: object
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      description: Create a new structure
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Structure'
+        required: true
+    put:
+      summary: ''
+      tags: [ 'structure' ]
+      operationId: update-structure
+      responses:
+        '200':
+          description: OK
+        '201':
+          description: Created
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      description: Create or update structure
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Structure'
+        required: true
+  '/v1/structures/{structureId}':
+    parameters:
+      - schema:
+          type: string
+        name: structureId
+        in: path
+        required: true
+    get:
+      summary: Your GET endpoint
+      tags: [ 'structure' ]
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Structure'
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      operationId: get-structure-by-id
+      description: Get structure by id
+    put:
+      summary: ''
+      tags: [ 'structure' ]
+      operationId: update-structure-by-structureId
+      responses:
+        '200':
+          description: OK
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      description: Update structure by structureId
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Structure'
+        required: true
+    delete:
+      summary: ''
+      tags: [ 'structure' ]
+      operationId: delete-structure-by-structureId
+      responses:
+        '204':
+          description: No Content
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      description: Delete structure by structureId
+components:
+  schemas:
+    Expertise:
+      description: ''
+      type: object
+      properties:
+        expertiseId:
+          type: string
+          minLength: 1
+        typeCode:
+          type: string
+          minLength: 1
+        code:
+          type: string
+          minLength: 1
+    Structure:
+      description: ''
+      type: object
+      properties:
+        siteSIRET:
+          type: string
+          minLength: 1
+        siteSIREN:
+          type: string
+          minLength: 1
+        siteFINESS:
+          type: string
+          minLength: 1
+        legalEstablishmentFINESS:
+          type: string
+          minLength: 1
+        structureTechnicalId:
+          type: string
+          minLength: 1
+        legalCommercialName:
+          type: string
+          minLength: 1
+        publicCommercialName:
+          type: string
+          minLength: 1
+        recipientAdditionalInfo:
+          type: string
+          minLength: 1
+        geoLocationAdditionalInfo:
+          type: string
+          minLength: 1
+        streetNumber:
+          type: string
+          minLength: 1
+        streetNumberRepetitionIndex:
+          type: string
+          minLength: 1
+        streetCategoryCode:
+          type: string
+          minLength: 1
+        streetLabel:
+          type: string
+          minLength: 1
+        distributionMention:
+          type: string
+          minLength: 1
+        cedexOffice:
+          type: string
+          minLength: 1
+        postalCode:
+          type: string
+          minLength: 1
+        communeCode:
+          type: string
+          minLength: 1
+        countryCode:
+          type: string
+          minLength: 1
+        phone:
+          type: string
+          minLength: 1
+        phone2:
+          type: string
+          minLength: 1
+        fax:
+          type: string
+          minLength: 1
+        email:
+          type: string
+          minLength: 1
+        departmentCode:
+          type: string
+          minLength: 1
+        oldStructureId:
+          type: string
+          minLength: 1
+        registrationAuthority:
+          type: string
+          minLength: 1
+    WorkSituation:
+      description: ''
+      type: object
+      properties:
+        situId:
+          type: string
+          minLength: 1
+        modeCode:
+          type: string
+          minLength: 1
+        activitySectorCode:
+          type: string
+          minLength: 1
+        pharmacistTableSectionCode:
+          type: string
+          minLength: 1
+        roleCode:
+          type: string
+          minLength: 1
+        structures:
+          type: array
+          items:
+            $ref: '#/components/schemas/Structure'
+    Profession:
+      description: ''
+      type: object
+      properties:
+        exProId:
+          type: string
+          minLength: 1
+        code:
+          type: string
+          minLength: 1
+        categoryCode:
+          type: string
+          minLength: 1
+        salutationCode:
+          type: string
+          minLength: 1
+        lastName:
+          type: string
+          minLength: 1
+        firstName:
+          type: string
+          minLength: 1
+        expertises:
+          type: array
+          items:
+            $ref: '#/components/schemas/Expertise'
+        workSituations:
+          type: array
+          items:
+            $ref: '#/components/schemas/WorkSituation'
+    PsRef:
+      description: ''
+      type: object
+      properties:
+        nationalIdRef:
+          type: string
+          minLength: 1
+        nationalId:
+          type: string
+          minLength: 1
+        activated:
+          type: string
+          minLength: 1
+        deactivated:
+          type: string
+          minLength: 1
+    Ps:
+      description: ''
+      type: object
+      properties:
+        idType:
+          type: string
+          minLength: 1
+        id:
+          type: string
+          minLength: 1
+        nationalId:
+          type: string
+          minLength: 1
+        lastName:
+          type: string
+          minLength: 1
+        firstName:
+          type: string
+          minLength: 1
+        dateOfBirth:
+          type: string
+          minLength: 1
+        birthAddressCode:
+          type: string
+          minLength: 1
+        birthCountryCode:
+          type: string
+          minLength: 1
+        birthAddress:
+          type: string
+          minLength: 1
+        genderCode:
+          type: string
+          minLength: 1
+        phone:
+          type: string
+          minLength: 1
+        email:
+          type: string
+          minLength: 1
+        salutationCode:
+          type: string
+          minLength: 1
+        professions:
+          type: array
+          items:
+            $ref: '#/components/schemas/Profession'
+    Error:
+      title: Error
+      type: object
+      properties:
+        code:
+          type: string
+        message:
+          type: string
