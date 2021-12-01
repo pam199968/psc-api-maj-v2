@@ -17,6 +17,8 @@ tags:
     description: expertise
   - name: structure
     description: structure
+  - name: toggle
+    description: toggle
 paths:
   /v1/ps:
     parameters: [ ]
@@ -309,6 +311,29 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
       description: Delete PsRef
+  /v1/psref/toggle:
+    put:
+      summary: 'toggle psref'
+      tags: [ 'toggle' ]
+      operationId: toggle-psref
+      responses:
+        200:
+          description: OK
+        404:
+          description: Not Found
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      description: Physical delete of old Ps and update PsRef to target new Ps
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PsRef'
+        required: true
   '/v1/ps/{psId}/professions':
     parameters:
       - schema:
