@@ -10,33 +10,5 @@ import java.util.Optional;
 
 public class ExpertiseApiDelegateImpl extends AbstractApiDelegate implements ExpertiseApiDelegate {
 
-    @Override
-    public Optional<NativeWebRequest> getRequest() {
-        return Optional.empty();
-    }
 
-    @Override
-    public ResponseEntity<Void> deleteExpertiseByExpertiseId(String psId, String exProId, String expertiseId) {
-        return null;
-    }
-
-    @Override
-    public ResponseEntity<List<Expertise>> getAllExpertisesByPsAndExPro(String psId, String exProId) {
-        return null;
-    }
-
-    @Override
-    public ResponseEntity<Expertise> getExpertiseByExpertiseId(String psId, String exProId, String expertiseId) {
-        return null;
-    }
-
-    @Override
-    public ResponseEntity<Void> postExpertiseForPsAndExProId(String psId, String exProId, Expertise expertise) {
-        return null;
-    }
-
-    @Override
-    public ResponseEntity<Void> updateExpertiseByExpertiseId(String psId, String exProId, String expertiseId, Expertise expertise) {
-        return null;
-    }
 }
