@@ -21,7 +21,6 @@ tags:
     description: toggle
 paths:
   /v1/ps:
-    parameters: [ ]
     get:
       summary: Get All Ps
       tags: [ 'ps']
@@ -45,7 +44,7 @@ paths:
       operationId: get-all-ps
       description: Retrieve the information of all the Ps.
     post:
-      summary: ''
+      summary: 'Create new Ps'
       tags: [ 'ps' ]
       operationId: create-new-Ps
       responses:
@@ -68,7 +67,7 @@ paths:
         required: true
         description: The Ps to be created
     put:
-      summary: ''
+      summary: 'Store or update'
       tags: [ 'ps' ]
       operationId: store-or-update
       responses:
@@ -95,7 +94,7 @@ paths:
         in: path
         required: true
     get:
-      summary: ''
+      summary: 'Get Ps by id'
       tags: [ 'ps' ]
       operationId: get-ps-by-id
       responses:
@@ -115,7 +114,7 @@ paths:
                 $ref: '#/components/schemas/Error'
       description: get a Ps by one of its idNationalRef
     put:
-      summary: ''
+      summary: 'Update Ps by id'
       tags: [ 'ps' ]
       operationId: update-ps-by-id
       responses:
@@ -136,9 +135,9 @@ paths:
             schema:
               $ref: '#/components/schemas/Ps'
         required: true
-        description: ''
+        description: 'The updated Ps to save'
     delete:
-      summary: ''
+      summary: 'Delete by id'
       tags: [ 'ps' ]
       operationId: delete-ps-by-id
       responses:
@@ -155,7 +154,7 @@ paths:
       description: Delet a PS by its id
   /v1/ps/force:
     post:
-      summary: ''
+      summary: 'Create or replace Ps'
       tags: [ 'ps' ]
       operationId: ps-force-create
       responses:
@@ -182,7 +181,7 @@ paths:
         in: path
         required: true
     delete:
-      summary: ''
+      summary: 'Force delete a Ps'
       tags: [ 'ps' ]
       operationId: force-delete-ps-by-id
       responses:
@@ -199,7 +198,7 @@ paths:
       description: completely delete Ps (not only deactivate it)
   /v1/psref:
     get:
-      summary: Your GET endpoint
+      summary: Get all PsRef
       tags: [ 'psref' ]
       responses:
         '200':
@@ -221,7 +220,7 @@ paths:
       operationId: get-all-psref
       description: Get all PsRef
     post:
-      summary: ''
+      summary: 'Create PsRef'
       tags: [ 'psref' ]
       operationId: post-psref
       responses:
@@ -254,7 +253,7 @@ paths:
         in: path
         required: true
     get:
-      summary: Your GET endpoint
+      summary: Get PsRef by id
       tags: [ 'psref' ]
       responses:
         '200':
@@ -274,7 +273,7 @@ paths:
       operationId: get-psref-by-id
       description: Get PsRef by nationalIdRef
     put:
-      summary: ''
+      summary: 'Update PsRef'
       tags: [ 'psref' ]
       operationId: update-psRef-by-id
       responses:
@@ -296,7 +295,7 @@ paths:
               $ref: '#/components/schemas/PsRef'
         required: true
     delete:
-      summary: ''
+      summary: 'Delete PsRef by id'
       tags: [ 'psref' ]
       operationId: delete-psRef-by-id
       responses:
@@ -342,7 +341,7 @@ paths:
         in: path
         required: true
     get:
-      summary: Your GET endpoint
+      summary: Get all professions of specific Ps
       tags: [ 'psref' ]
       responses:
         '200':
@@ -364,7 +363,7 @@ paths:
       operationId: get-all-professions-by-ps
       description: Get all professions by ps
     post:
-      summary: ''
+      summary: 'Create a profession for a Ps'
       tags: [ 'profession' ]
       operationId: create-new-profession
       responses:
@@ -402,7 +401,7 @@ paths:
         in: path
         required: true
     get:
-      summary: Your GET endpoint
+      summary: Get a profession by id and Ps
       tags: [ 'profession' ]
       responses:
         '200':
@@ -422,7 +421,7 @@ paths:
       operationId: get-profession-by-exProId
       description: Get profession by exProId
     put:
-      summary: ''
+      summary: 'Update profession for a Ps'
       tags: [ 'profession' ]
       operationId: update-profession-by-ids-exProId
       responses:
@@ -445,7 +444,7 @@ paths:
         required: true
         description: ''
     delete:
-      summary: ''
+      summary: 'Delete a profession for a Ps'
       tags: [ 'profession' ]
       operationId: delete-profession-by-exProId
       responses:
@@ -473,7 +472,7 @@ paths:
         in: path
         required: true
     get:
-      summary: Your GET endpoint
+      summary: Get all expertises for a Ps and a profession
       tags: [ 'expertise' ]
       responses:
         '200':
@@ -495,7 +494,7 @@ paths:
       operationId: get-all-expertises-by-ps-and-exPro
       description: Get all expertises by Ps and exProId
     post:
-      summary: ''
+      summary: 'Create new expertise for a Ps and a profession'
       tags: [ 'expertise' ]
       operationId: post-expertise-for-Ps-and-exProId
       responses:
@@ -538,7 +537,7 @@ paths:
         in: path
         required: true
     get:
-      summary: Your GET endpoint
+      summary: Get an expertise by Ps, profession and id
       tags: [ 'expertise' ]
       responses:
         '200':
@@ -558,7 +557,7 @@ paths:
       operationId: get-expertise-by-expertiseId
       description: Get expertise by expertiseId
     put:
-      summary: ''
+      summary: 'Update expertise by Ps, profession and id'
       tags: [ 'expertise' ]
       operationId: update-expertise-by-expertiseId
       responses:
@@ -580,7 +579,7 @@ paths:
               $ref: '#/components/schemas/Expertise'
         required: true
     delete:
-      summary: ''
+      summary: 'Delete expertise by Ps, profession and id'
       tags: [ 'expertise' ]
       operationId: delete-expertise-by-expertiseId
       responses:
@@ -608,7 +607,7 @@ paths:
         in: path
         required: true
     get:
-      summary: Your GET endpoint
+      summary: Get all workSituations for a Ps and a profession
       tags: [ 'workSituation' ]
       responses:
         '200':
@@ -630,7 +629,7 @@ paths:
       operationId: get-all-workSituations-for-ps-and-exProId
       description: Get all workSituations for Ps and exProId
     post:
-      summary: ''
+      summary: 'Create a new workSituation for a Ps and a profession'
       tags: [ 'workSituation' ]
       operationId: create-new-workSituation-for-ps-and-exProId
       responses:
@@ -674,7 +673,7 @@ paths:
         in: path
         required: true
     get:
-      summary: Your GET endpoint
+      summary: Get a workSituation by Ps, profession and id
       tags: [ 'workSituation' ]
       responses:
         '200':
@@ -694,7 +693,7 @@ paths:
       operationId: get-workSituation-by-situId
       description: Get workSituation by situId
     put:
-      summary: ''
+      summary: 'Update a workSituation by Ps, profession and id'
       tags: [ 'workSituation' ]
       operationId: update-workSituation-by-situId
       responses:
@@ -716,7 +715,7 @@ paths:
               $ref: '#/components/schemas/WorkSituation'
         required: true
     delete:
-      summary: ''
+      summary: 'Delete workSituation by Ps, profession and id'
       tags: [ 'workSituation' ]
       operationId: delete-workSituation-by-situId
       responses:
@@ -733,7 +732,7 @@ paths:
       description: Delete workSituation by situId
   /v1/structures:
     get:
-      summary: Your GET endpoint
+      summary: Get all structures
       tags: [ 'structure' ]
       responses:
         '200':
@@ -755,7 +754,7 @@ paths:
       operationId: get-all-structures
       description: Get all structures
     post:
-      summary: ''
+      summary: 'Create new structure'
       tags: [ 'structure' ]
       operationId: create-new-structure
       responses:
@@ -781,7 +780,7 @@ paths:
               $ref: '#/components/schemas/Structure'
         required: true
     put:
-      summary: ''
+      summary: 'Create or update structure'
       tags: [ 'structure' ]
       operationId: update-structure
       responses:
@@ -810,7 +809,7 @@ paths:
         in: path
         required: true
     get:
-      summary: Your GET endpoint
+      summary: Get structure by id
       tags: [ 'structure' ]
       responses:
         '200':
@@ -830,7 +829,7 @@ paths:
       operationId: get-structure-by-id
       description: Get structure by id
     put:
-      summary: ''
+      summary: 'Update structure by id'
       tags: [ 'structure' ]
       operationId: update-structure-by-structureId
       responses:
@@ -852,7 +851,7 @@ paths:
               $ref: '#/components/schemas/Structure'
         required: true
     delete:
-      summary: ''
+      summary: 'Delete structure by id'
       tags: [ 'structure' ]
       operationId: delete-structure-by-structureId
       responses:
