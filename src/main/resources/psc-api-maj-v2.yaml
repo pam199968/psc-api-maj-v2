@@ -960,6 +960,8 @@ components:
         registrationAuthority:
           type: string
           minLength: 1
+      required:
+        - structureTechnicalId
     WorkSituation:
       description: ''
       type: object
@@ -1029,6 +1031,9 @@ components:
         deactivated:
           type: string
           minLength: 1
+      required:
+        - nationalId
+        - nationalIdRef
     Ps:
       description: ''
       type: object
@@ -1076,6 +1081,8 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Profession'
+      required:
+        - nationalId
     Error:
       title: Error
       type: object
