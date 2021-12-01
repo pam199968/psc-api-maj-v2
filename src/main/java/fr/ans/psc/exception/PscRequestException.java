@@ -1,7 +1,7 @@
 /**
  * (c) Copyright 1998-2021, ANS. All rights reserved.
  */
-package fr.ans.psc.delegate.impl.exception;
+package fr.ans.psc.exception;
 
 import lombok.Getter;
 import lombok.Setter;

@@ -1,4 +1,4 @@
-package fr.ans.psc.delegate.impl;
+package fr.ans.psc.delegate;
 
 import fr.ans.psc.api.ExpertiseApiDelegate;
 import fr.ans.psc.model.Expertise;
@@ -8,7 +8,8 @@ import org.springframework.web.context.request.NativeWebRequest;
 import java.util.List;
 import java.util.Optional;
 
-public class ExpertiseApiDelegateImpl implements ExpertiseApiDelegate {
+public class ExpertiseApiDelegateImpl extends AbstractApiDelegate implements ExpertiseApiDelegate {
+
     @Override
     public Optional<NativeWebRequest> getRequest() {
         return Optional.empty();

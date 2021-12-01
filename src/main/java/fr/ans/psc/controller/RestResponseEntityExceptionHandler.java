@@ -1,9 +1,9 @@
 /**
  * (c) Copyright 1998-2021, ANS. All rights reserved.
  */
-package fr.ans.psc.delegate.impl;
+package fr.ans.psc.controller;
 
-import fr.ans.psc.delegate.impl.exception.PscRequestException;
+import fr.ans.psc.exception.PscRequestException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;

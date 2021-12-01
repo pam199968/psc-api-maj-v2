@@ -1,9 +1,9 @@
 /**
  * (c) Copyright 1998-2021, ANS. All rights reserved.
  */
-package fr.ans.psc.delegate.impl;
+package fr.ans.psc.delegate;
 
-import fr.ans.psc.delegate.impl.exception.PscRequestException;
+import fr.ans.psc.exception.PscRequestException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.context.request.NativeWebRequest;
