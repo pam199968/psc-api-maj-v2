@@ -15,7 +15,6 @@ import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 
 @Configuration
-@Import(SwaggerConfiguration.class)
 @EnableOpenApi
 public class WebConfig {
 
