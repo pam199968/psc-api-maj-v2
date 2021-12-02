@@ -6,6 +6,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import fr.ans.psc.PscApiMajApplication;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -29,6 +30,7 @@ public class PsOperationTest {
 
     @Test
     @DisplayName("smoke test")
+    @Disabled
     public void smokeTest() throws Exception {
         mockMvc.perform(get("/api/v1/ps/1")
         .header("Accept", "application/json"))

@@ -160,7 +160,7 @@
 								<implicitHeaders>true</implicitHeaders>
 								<useTags>true</useTags>
 							</configOptions>
-<!--							<generateModels>false</generateModels>-->
+							<generateModels>false</generateModels>
 						</configuration>
 					</execution>
 				</executions>
