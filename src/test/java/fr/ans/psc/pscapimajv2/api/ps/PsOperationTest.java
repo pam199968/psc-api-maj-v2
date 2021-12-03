@@ -32,7 +32,7 @@ public class PsOperationTest {
     @DisplayName("smoke test")
     @Disabled
     public void smokeTest() throws Exception {
-        mockMvc.perform(get("/api/v1/ps/1")
+        mockMvc.perform(get("/api/v1/ps/899700264593")
         .header("Accept", "application/json"))
                 .andExpect(status().is2xxSuccessful()).andDo(print());
     }

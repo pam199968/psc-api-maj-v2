@@ -7,13 +7,13 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.mongo.embedded.EmbeddedMongoAutoConfiguration;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
-
 @Slf4j
-@EnableAutoConfiguration(exclude = {EmbeddedMongoAutoConfiguration.class})
+//@EnableAutoConfiguration(exclude = {EmbeddedMongoAutoConfiguration.class})
+@Configuration
 @Service
 public class MongoDBConfig {
 
