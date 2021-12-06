@@ -35,7 +35,7 @@ import java.io.IOException;
 import java.util.List;
 
 @ExtendWith({RestDocumentationExtension.class, SpringExtension.class}) // pour restdocs
-@SpringBootTest // (properties = "file.encoding=UTF-8")
+@SpringBootTest(classes = PsOperationTest.TestConfiguration.class) // (properties = "file.encoding=UTF-8")
 @AutoConfigureMockMvc
 @ContextConfiguration(classes = {PscApiMajApplication.class, MongoTestServerConfiguration.class})
 public class PsOperationTest {
@@ -64,6 +64,8 @@ public class PsOperationTest {
     public void setUp() throws IOException {
 //        psRepository.deleteAll();
 //        psRefRepository.deleteAll();
+        mongoTemplateTest.dropCollection("ps");
+        mongoTemplateTest.dropCollection("psref");
 
         ObjectMapper mapper = new ObjectMapper();
         List<Ps> psList = mapper.readValue(

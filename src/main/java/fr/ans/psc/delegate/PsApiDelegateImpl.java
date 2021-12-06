@@ -7,7 +7,6 @@ import fr.ans.psc.repository.PsRefRepository;
 import fr.ans.psc.repository.PsRepository;
 import fr.ans.psc.utils.ApiUtils;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,13 +20,12 @@ public class PsApiDelegateImpl extends AbstractApiDelegate implements PsApiDeleg
 
     private final PsRepository psRepository;
     private final PsRefRepository psRefRepository;
+    private final MongoTemplate mongoTemplate;
 
-    @Autowired
-    private MongoTemplate mongoTemplate;
-
-    public PsApiDelegateImpl(PsRepository psRepository, PsRefRepository psRefRepository) {
+    public PsApiDelegateImpl(PsRepository psRepository, PsRefRepository psRefRepository, MongoTemplate mongoTemplate) {
         this.psRepository = psRepository;
         this.psRefRepository = psRefRepository;
+        this.mongoTemplate = mongoTemplate;
     }
 
     @Override
@@ -38,12 +36,14 @@ public class PsApiDelegateImpl extends AbstractApiDelegate implements PsApiDeleg
         // check if PsRef exists and is activated
         if (psRef == null ||
                 ( psRef.getDeactivated() != null && psRef.getDeactivated() > psRef.getActivated())) {
+            String operationLog = psRef == null ? "No Ps found with nationalIdRef {}" : "Ps {} is deactivated";
+            log.warn(operationLog, psId);
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
         String nationalId = psRef.getNationalId();
-
         Ps ps = psRepository.findByNationalId(nationalId);
+        log.info("Ps {} has been found", nationalId);
         return new ResponseEntity<>(ps, HttpStatus.OK);
     }
 
@@ -53,14 +53,17 @@ public class PsApiDelegateImpl extends AbstractApiDelegate implements PsApiDeleg
 
         // check if Ps already exists
         if (storedPs != null) {
+            log.warn("Ps {} already exists", ps.getNationalId());
             return new ResponseEntity<>(HttpStatus.CONFLICT);
         }
 
         mongoTemplate.save(ps);
+        log.info("Ps {} newly created", ps.getNationalId());
 
         // create PsLink as well
         PsRef psRef = new PsRef(ps.getNationalId(), ps.getNationalId(), ApiUtils.getInstantTimestamp());
         mongoTemplate.save(psRef);
+        log.info("PsRef {} newly created", ps.getNationalId());
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
@@ -70,10 +73,12 @@ public class PsApiDelegateImpl extends AbstractApiDelegate implements PsApiDeleg
         // set mongo _id to avoid error if it's an update
         Ps storedPs = psRepository.findByNationalId(ps.getNationalId());
         if (storedPs != null) {
+            log.trace("Ps {} already exists, will be updated", ps.getNationalId());
             ps.set_id(storedPs.get_id());
         }
 
         mongoTemplate.save(ps);
+        log.info("Ps {} succesfully stored or updated", ps.getNationalId());
 
         List<PsRef> psRefList = psRefRepository.findAllByNationalId(ps.getNationalId());
         long timestamp = ApiUtils.getInstantTimestamp();
@@ -83,6 +88,7 @@ public class PsApiDelegateImpl extends AbstractApiDelegate implements PsApiDeleg
                     .forEach(psRef -> {
                         psRef.setActivated(timestamp);
                         mongoTemplate.save(psRef);
+//                        log.trace("PsRef")
                     });
         } else {
             // psRef could exist already and point to another Ps

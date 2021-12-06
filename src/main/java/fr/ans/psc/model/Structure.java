@@ -21,6 +21,14 @@ public class Structure   {
   @JsonProperty("siteSIRET")
   private String siteSIRET;
 
+  public String get_id() {
+    return _id;
+  }
+
+  public void set_id(String _id) {
+    this._id = _id;
+  }
+
   @JsonProperty("siteSIREN")
   private String siteSIREN;
 
