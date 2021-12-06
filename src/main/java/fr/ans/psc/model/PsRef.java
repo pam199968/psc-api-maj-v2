@@ -15,6 +15,9 @@ import java.util.Objects;
  */
 @Document(collection = "psref")
 public class PsRef   {
+  @Id
+  private String _id;
+
   @JsonProperty("nationalIdRef")
   @Indexed(unique = true)
   private String nationalIdRef;
@@ -23,10 +26,19 @@ public class PsRef   {
   private String nationalId;
 
   @JsonProperty("activated")
-  private String activated;
+  private Long activated;
 
   @JsonProperty("deactivated")
-  private String deactivated;
+  private Long deactivated;
+
+  public PsRef() {
+  }
+
+  public PsRef(String nationalIdRef, String nationalId, Long activated) {
+    this.nationalIdRef = nationalIdRef;
+    this.nationalId = nationalId;
+    this.activated = activated;
+  }
 
   public PsRef nationalIdRef(String nationalIdRef) {
     this.nationalIdRef = nationalIdRef;
@@ -70,7 +82,7 @@ public class PsRef   {
     this.nationalId = nationalId;
   }
 
-  public PsRef activated(String activated) {
+  public PsRef activated(Long activated) {
     this.activated = activated;
     return this;
   }
@@ -82,15 +94,15 @@ public class PsRef   {
   @ApiModelProperty(value = "")
 
 @Size(min = 1) 
-  public String getActivated() {
+  public Long getActivated() {
     return activated;
   }
 
-  public void setActivated(String activated) {
+  public void setActivated(Long activated) {
     this.activated = activated;
   }
 
-  public PsRef deactivated(String deactivated) {
+  public PsRef deactivated(Long deactivated) {
     this.deactivated = deactivated;
     return this;
   }
@@ -102,11 +114,11 @@ public class PsRef   {
   @ApiModelProperty(value = "")
 
 @Size(min = 1) 
-  public String getDeactivated() {
+  public Long getDeactivated() {
     return deactivated;
   }
 
-  public void setDeactivated(String deactivated) {
+  public void setDeactivated(Long deactivated) {
     this.deactivated = deactivated;
   }
 
