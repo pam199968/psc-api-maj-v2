@@ -3,6 +3,7 @@ package fr.ans.psc.model;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModelProperty;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.validation.constraints.NotNull;
@@ -15,7 +16,7 @@ import java.util.Objects;
 @Document(collection = "psref")
 public class PsRef   {
   @JsonProperty("nationalIdRef")
-  @Id
+  @Indexed(unique = true)
   private String nationalIdRef;
 
   @JsonProperty("nationalId")

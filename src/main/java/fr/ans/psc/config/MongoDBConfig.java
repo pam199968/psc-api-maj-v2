@@ -12,7 +12,6 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Service;
 
 @Slf4j
-//@EnableAutoConfiguration(exclude = {EmbeddedMongoAutoConfiguration.class})
 @Configuration
 @Service
 public class MongoDBConfig {
