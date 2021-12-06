@@ -1,0 +1,17 @@
+[
+  {
+    "nationalIdRef": "800000000001",
+    "nationalId": "800000000001",
+    "activated": 1638791221
+  },
+  {
+    "nationalIdRef": "800000000011",
+    "nationalId": "800000000001",
+    "activated": 1638791225
+  },
+  {
+    "nationalIdRef": "800000000002",
+    "nationalId": "800000000002",
+    "activated": 1638791221
+  }
+]
