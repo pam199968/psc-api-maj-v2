@@ -138,7 +138,6 @@ public class PsOperationTest {
                 "      ]\n" +
                 "    }";
 
-        // cas nominal : Ps existe et retourné
         ResultActions returned = mockMvc.perform(get("/api/v1/ps/800000000001")
                 .header("Accept", "application/json"))
                 .andExpect(status().is2xxSuccessful());
@@ -150,7 +149,7 @@ public class PsOperationTest {
     @Test
     @MongoDataSet(value = "/dataset/deactivated_ps.json", cleanBefore = true, cleanAfter = true)
     public void shouldNotGetPsIfDeactivated() throws Exception {
-        ResultActions returned = mockMvc.perform(get("/api/v1/ps/800000000002")
+        mockMvc.perform(get("/api/v1/ps/800000000002")
                 .header("Accept", "application/json"))
                 .andExpect(status().is(404));
         assertThat(memoryAppender.contains("Ps 800000000002 is deactivated", Level.WARN)).isTrue();
@@ -159,7 +158,7 @@ public class PsOperationTest {
     @Test
     @MongoDataSet(value = "/dataset/deactivated_ps.json", cleanBefore = true, cleanAfter = true)
     public void shouldNotGetPsIfNotExist() throws Exception {
-        ResultActions returned = mockMvc.perform(get("/api/v1/ps/800000000003")
+        mockMvc.perform(get("/api/v1/ps/800000000003")
                 .header("Accept", "application/json"))
                 .andExpect(status().is(404));
         assertThat(memoryAppender.contains("No Ps found with nationalIdRef 800000000003", Level.WARN)).isTrue();
