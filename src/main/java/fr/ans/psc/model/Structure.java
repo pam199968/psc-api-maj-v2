@@ -15,6 +15,9 @@ import java.util.Objects;
  */
 @Document(collection = "structure")
 public class Structure   {
+  @Id
+  private String _id;
+
   @JsonProperty("siteSIRET")
   private String siteSIRET;
 
