@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
 		<version>2.5.7</version>
-		<relativePath/> <!-- lookup parent from repository -->
+		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>fr.ans.psc</groupId>
 	<artifactId>psc-api-maj-v2</artifactId>
@@ -57,11 +58,11 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
-<!--		<dependency>-->
-<!--			<groupId>de.flapdoodle.embed</groupId>-->
-<!--			<artifactId>de.flapdoodle.embed.mongo</artifactId>-->
-<!--			<scope>test</scope>-->
-<!--		</dependency>-->
+		<dependency>
+			<groupId>de.flapdoodle.embed</groupId>
+			<artifactId>de.flapdoodle.embed.mongo</artifactId>
+			<scope>test</scope>
+		</dependency>
 		<dependency>
 			<groupId>org.springframework.restdocs</groupId>
 			<artifactId>spring-restdocs-mockmvc</artifactId>
@@ -144,9 +145,10 @@
 		</dependency>
 
 		<dependency>
-			<groupId>de.bwaldvogel</groupId>
-			<artifactId>mongo-java-server</artifactId>
-			<version>1.39.0</version>
+			<groupId>com.jupiter-tools</groupId>
+			<artifactId>spring-test-mongo</artifactId>
+			<version>0.15</version>
+			<scope>test</scope>
 		</dependency>
 
 
@@ -200,7 +202,7 @@
 							<goal>process-asciidoc</goal>
 						</goals>
 						<configuration>
-							<!-- ce fichier doit être dans src/main/asciidoc qui doit contenir
+							<!-- ce fichier doit être dans src/main/asciidoc qui doit contenir 
 								les snippets à intégrer -->
 							<sourceDocumentName>esignsante-psc-api.adoc</sourceDocumentName>
 
