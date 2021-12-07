@@ -36,8 +36,8 @@ paths:
                   $ref: '#/components/schemas/Ps'
         '404':
           description: Ps not Found
-        '500':
-          description: Internal Server Error
+        '400':
+          description: Bad Request
           content:
             application/json:
               schema:
@@ -53,8 +53,8 @@ paths:
           description: Created
         '409':
           description: Ps already exists
-        '500':
-          description: Internal Server Error
+        '400':
+          description: Bad Request
           content:
             application/json:
               schema:
@@ -74,8 +74,8 @@ paths:
       responses:
         '201':
           description: Created
-        '500':
-          description: Internal Server Error
+        '400':
+          description: Bad Request
           content:
             application/json:
               schema:
@@ -107,8 +107,8 @@ paths:
                 $ref: '#/components/schemas/Ps'
         '404':
           description: Not Found
-        '500':
-          description: Internal Server Error
+        '400':
+          description: Bad Request
           content:
             application/json:
               schema:
@@ -123,8 +123,8 @@ paths:
           description: OK
         '404':
           description: Not Found
-        '500':
-          description: Internal Server Error
+        '400':
+          description: Bad Request
           content:
             application/json:
               schema:
@@ -146,8 +146,8 @@ paths:
           description: No Content
         '404':
           description: Not Found
-        '500':
-          description: Internal Server Error
+        '400':
+          description: Bad Request
           content:
             application/json:
               schema:
@@ -161,8 +161,8 @@ paths:
       responses:
         '200':
           description: OK
-        '500':
-          description: Internal Server Error
+        '400':
+          description: Bad Request
           content:
             application/json:
               schema:
@@ -190,8 +190,8 @@ paths:
           description: No Content
         '404':
           description: Not Found
-        '500':
-          description: Internal Server Error
+        '400':
+          description: Bad Request
           content:
             application/json:
               schema:
@@ -212,8 +212,8 @@ paths:
                   $ref: '#/components/schemas/PsRef'
         '404':
           description: Not Found
-        '500':
-          description: Internal Server Error
+        '400':
+          description: Bad Request
           content:
             application/json:
               schema:
@@ -233,8 +233,8 @@ paths:
             application/json:
               schema:
                 type: object
-        '500':
-          description: Internal Server Error
+        '400':
+          description: Bad Request
           content:
             application/json:
               schema:
@@ -265,8 +265,8 @@ paths:
                 $ref: '#/components/schemas/PsRef'
         '404':
           description: Not Found
-        '500':
-          description: Internal Server Error
+        '400':
+          description: Bad Request
           content:
             application/json:
               schema:
@@ -282,8 +282,8 @@ paths:
           description: OK
         '404':
           description: Not Found
-        '500':
-          description: Internal Server Error
+        '400':
+          description: Bad Request
           content:
             application/json:
               schema:
@@ -304,8 +304,8 @@ paths:
           description: No Content
         '404':
           description: Not Found
-        '500':
-          description: Internal Server Error
+        '400':
+          description: Bad Request
           content:
             application/json:
               schema:
@@ -322,7 +322,7 @@ paths:
         404:
           description: Not Found
         500:
-          description: Internal Server Error
+          description: Bad Request
           content:
             application/json:
               schema:
@@ -355,8 +355,8 @@ paths:
                   $ref: '#/components/schemas/Profession'
         '404':
           description: Not Found
-        '500':
-          description: Internal Server Error
+        '400':
+          description: Bad Request
           content:
             application/json:
               schema:
@@ -376,8 +376,8 @@ paths:
             application/json:
               schema:
                 type: object
-        '500':
-          description: Internal Server Error
+        '400':
+          description: Bad Request
           content:
             application/json:
               schema:
@@ -413,8 +413,8 @@ paths:
                 $ref: '#/components/schemas/Profession'
         '404':
           description: Not Found
-        '500':
-          description: Internal Server Error
+        '400':
+          description: Bad Request
           content:
             application/json:
               schema:
@@ -430,8 +430,8 @@ paths:
           description: OK
         '404':
           description: Not Found
-        '500':
-          description: Internal Server Error
+        '400':
+          description: Bad Request
           content:
             application/json:
               schema:
@@ -453,8 +453,8 @@ paths:
           description: No Content
         '404':
           description: Not Found
-        '500':
-          description: Internal Server Error
+        '400':
+          description: Bad Request
           content:
             application/json:
               schema:
@@ -486,8 +486,8 @@ paths:
                   $ref: '#/components/schemas/Expertise'
         '404':
           description: Not Found
-        '500':
-          description: Internal Server Error
+        '400':
+          description: Bad Request
           content:
             application/json:
               schema:
@@ -507,8 +507,8 @@ paths:
             application/json:
               schema:
                 type: object
-        '500':
-          description: Internal Server Error
+        '400':
+          description: Bad Request
           content:
             application/json:
               schema:
@@ -549,8 +549,8 @@ paths:
                 $ref: '#/components/schemas/Expertise'
         '404':
           description: Not Found
-        '500':
-          description: Internal Server Error
+        '400':
+          description: Bad Request
           content:
             application/json:
               schema:
@@ -566,8 +566,8 @@ paths:
           description: OK
         '404':
           description: Not Found
-        '500':
-          description: Internal Server Error
+        '400':
+          description: Bad Request
           content:
             application/json:
               schema:
@@ -588,8 +588,8 @@ paths:
           description: No Content
         '404':
           description: Not Found
-        '500':
-          description: Internal Server Error
+        '400':
+          description: Bad Request
           content:
             application/json:
               schema:
@@ -621,8 +621,8 @@ paths:
                   $ref: '#/components/schemas/WorkSituation'
         '404':
           description: Not Found
-        '500':
-          description: Internal Server Error
+        '400':
+          description: Bad Request
           content:
             application/json:
               schema:
@@ -642,8 +642,8 @@ paths:
             application/json:
               schema:
                 type: object
-        '500':
-          description: Internal Server Error
+        '400':
+          description: Bad Request
           content:
             application/json:
               schema:
@@ -685,8 +685,8 @@ paths:
                 $ref: '#/components/schemas/WorkSituation'
         '404':
           description: Not Found
-        '500':
-          description: Internal Server Error
+        '400':
+          description: Bad Request
           content:
             application/json:
               schema:
@@ -702,8 +702,8 @@ paths:
           description: OK
         '404':
           description: Not Found
-        '500':
-          description: Internal Server Error
+        '400':
+          description: Bad Request
           content:
             application/json:
               schema:
@@ -724,8 +724,8 @@ paths:
           description: No Content
         '404':
           description: Not Found
-        '500':
-          description: Internal Server Error
+        '400':
+          description: Bad Request
           content:
             application/json:
               schema:
@@ -746,8 +746,8 @@ paths:
                   $ref: '#/components/schemas/Structure'
         '404':
           description: Not Found
-        '500':
-          description: Internal Server Error
+        '400':
+          description: Bad Request
           content:
             application/json:
               schema:
@@ -767,8 +767,8 @@ paths:
             application/json:
               schema:
                 type: object
-        '500':
-          description: Internal Server Error
+        '400':
+          description: Bad Request
           content:
             application/json:
               schema:
@@ -789,8 +789,8 @@ paths:
           description: OK
         '201':
           description: Created
-        '500':
-          description: Internal Server Error
+        '400':
+          description: Bad Request
           content:
             application/json:
               schema:
@@ -821,8 +821,8 @@ paths:
                 $ref: '#/components/schemas/Structure'
         '404':
           description: Not Found
-        '500':
-          description: Internal Server Error
+        '400':
+          description: Bad Request
           content:
             application/json:
               schema:
@@ -838,8 +838,8 @@ paths:
           description: OK
         '404':
           description: Not Found
-        '500':
-          description: Internal Server Error
+        '400':
+          description: Bad Request
           content:
             application/json:
               schema:
@@ -860,8 +860,8 @@ paths:
           description: No Content
         '404':
           description: Not Found
-        '500':
-          description: Internal Server Error
+        '400':
+          description: Bad Request
           content:
             application/json:
               schema:

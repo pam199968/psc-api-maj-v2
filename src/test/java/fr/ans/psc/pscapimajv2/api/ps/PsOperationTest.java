@@ -2,6 +2,7 @@ package fr.ans.psc.pscapimajv2.api.ps;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -189,9 +190,9 @@ public class PsOperationTest {
     @Test
     @DisplayName(value = "should not create Ps if malformed request body")
     public void createMalformedPsFailed() throws Exception {
-//        mockMvc.perform(post("/api/v1/ps").header("Accept", "application/json")
-//                .contentType("application/json").content("{\"toto\":\"titi\"}"))
-//                .andExpect(status().is5xxServerError());
+        mockMvc.perform(post("/api/v1/ps").header("Accept", "application/json")
+                .contentType("application/json").content("{\"toto\":\"titi\"}"))
+                .andExpect(status().is4xxClientError()).andDo(print());
     }
 
 

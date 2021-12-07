@@ -25,19 +25,12 @@ public class Ps   {
   @JsonProperty("idType")
   private String idType;
 
-  public String get_id() {
-    return _id;
-  }
-
-  public void set_id(String _id) {
-    this._id = _id;
-  }
-
   @JsonProperty("id")
   private String id;
 
   @JsonProperty("nationalId")
   @Indexed(unique = true)
+  @NotNull(message = "nationalId should not be null")
   private String nationalId;
 
   @JsonProperty("lastName")
@@ -74,11 +67,13 @@ public class Ps   {
   @Valid
   private List<Profession> professions = null;
 
-  public Ps idType(String idType) {
-    this.idType = idType;
-    return this;
+  public String get_id() {
+    return _id;
   }
 
+  public void set_id(String _id) {
+    this._id = _id;
+  }
   /**
    * Get idType
    * @return idType
@@ -124,7 +119,7 @@ public class Ps   {
    * @return nationalId
   */
   @ApiModelProperty(required = true, value = "")
-  @NotNull
+  @NotNull(message = "getter null")
 
 @Size(min = 1) 
   public String getNationalId() {
