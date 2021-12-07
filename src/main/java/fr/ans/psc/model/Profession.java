@@ -1,17 +1,18 @@
 package fr.ans.psc.model;
 
+import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-
-import javax.validation.Valid;
-import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
+import javax.validation.Valid;
 
 /**
  * Profession
  */
+@ApiModel(description = "Profession")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2021-12-07T17:22:10.562370300+01:00[Europe/Paris]")
 public class Profession   {
   @JsonProperty("exProId")
   private String exProId;
@@ -49,8 +50,6 @@ public class Profession   {
    * @return exProId
   */
   @ApiModelProperty(value = "")
-
-@Size(min = 1) 
   public String getExProId() {
     return exProId;
   }
@@ -59,18 +58,11 @@ public class Profession   {
     this.exProId = exProId;
   }
 
-  public Profession code(String code) {
-    this.code = code;
-    return this;
-  }
-
   /**
    * Get code
    * @return code
   */
   @ApiModelProperty(value = "")
-
-@Size(min = 1) 
   public String getCode() {
     return code;
   }
@@ -79,18 +71,11 @@ public class Profession   {
     this.code = code;
   }
 
-  public Profession categoryCode(String categoryCode) {
-    this.categoryCode = categoryCode;
-    return this;
-  }
-
   /**
    * Get categoryCode
    * @return categoryCode
   */
   @ApiModelProperty(value = "")
-
-@Size(min = 1) 
   public String getCategoryCode() {
     return categoryCode;
   }
@@ -99,18 +84,11 @@ public class Profession   {
     this.categoryCode = categoryCode;
   }
 
-  public Profession salutationCode(String salutationCode) {
-    this.salutationCode = salutationCode;
-    return this;
-  }
-
   /**
    * Get salutationCode
    * @return salutationCode
   */
   @ApiModelProperty(value = "")
-
-@Size(min = 1) 
   public String getSalutationCode() {
     return salutationCode;
   }
@@ -119,18 +97,11 @@ public class Profession   {
     this.salutationCode = salutationCode;
   }
 
-  public Profession lastName(String lastName) {
-    this.lastName = lastName;
-    return this;
-  }
-
   /**
    * Get lastName
    * @return lastName
   */
   @ApiModelProperty(value = "")
-
-@Size(min = 1) 
   public String getLastName() {
     return lastName;
   }
@@ -139,18 +110,11 @@ public class Profession   {
     this.lastName = lastName;
   }
 
-  public Profession firstName(String firstName) {
-    this.firstName = firstName;
-    return this;
-  }
-
   /**
    * Get firstName
    * @return firstName
   */
   @ApiModelProperty(value = "")
-
-@Size(min = 1) 
   public String getFirstName() {
     return firstName;
   }
@@ -159,27 +123,12 @@ public class Profession   {
     this.firstName = firstName;
   }
 
-  public Profession expertises(List<Expertise> expertises) {
-    this.expertises = expertises;
-    return this;
-  }
-
-  public Profession addExpertisesItem(Expertise expertisesItem) {
-    if (this.expertises == null) {
-      this.expertises = new ArrayList<Expertise>();
-    }
-    this.expertises.add(expertisesItem);
-    return this;
-  }
-
   /**
    * Get expertises
    * @return expertises
   */
   @ApiModelProperty(value = "")
-
   @Valid
-
   public List<Expertise> getExpertises() {
     return expertises;
   }
@@ -188,27 +137,12 @@ public class Profession   {
     this.expertises = expertises;
   }
 
-  public Profession workSituations(List<WorkSituation> workSituations) {
-    this.workSituations = workSituations;
-    return this;
-  }
-
-  public Profession addWorkSituationsItem(WorkSituation workSituationsItem) {
-    if (this.workSituations == null) {
-      this.workSituations = new ArrayList<WorkSituation>();
-    }
-    this.workSituations.add(workSituationsItem);
-    return this;
-  }
-
   /**
    * Get workSituations
    * @return workSituations
   */
   @ApiModelProperty(value = "")
-
   @Valid
-
   public List<WorkSituation> getWorkSituations() {
     return workSituations;
   }

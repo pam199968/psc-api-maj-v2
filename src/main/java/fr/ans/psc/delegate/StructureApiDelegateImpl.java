@@ -63,11 +63,11 @@ public class StructureApiDelegateImpl extends AbstractApiDelegate implements Str
     }
 
     @Override
-    public ResponseEntity<Void> updateStructureByStructureId(String structureId, Structure structure) {
-        Structure storedStructure = structureRepository.findByStructureTechnicalId(structureId);
+    public ResponseEntity<Void> updateStructure(Structure structure) {
+        Structure storedStructure = structureRepository.findByStructureTechnicalId(structure.getStructureTechnicalId());
 
         if (storedStructure == null) {
-            log.warn("Structure {} not found", structureId);
+            log.warn("Structure {} not found", structure.getStructureTechnicalId());
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 

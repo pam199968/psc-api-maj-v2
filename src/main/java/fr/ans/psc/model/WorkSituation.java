@@ -1,17 +1,17 @@
 package fr.ans.psc.model;
 
+import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModelProperty;
-
-import javax.validation.Valid;
-import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
+import javax.validation.Valid;
+import javax.validation.constraints.*;
 
 /**
  * WorkSituation
  */
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2021-12-07T17:22:10.562370300+01:00[Europe/Paris]")
 public class WorkSituation   {
   @JsonProperty("situId")
   private String situId;
@@ -32,18 +32,12 @@ public class WorkSituation   {
   @Valid
   private List<Structure> structures = null;
 
-  public WorkSituation situId(String situId) {
-    this.situId = situId;
-    return this;
-  }
-
   /**
    * Get situId
    * @return situId
   */
   @ApiModelProperty(value = "")
-
-@Size(min = 1) 
+@Size(min = 0) 
   public String getSituId() {
     return situId;
   }
@@ -52,17 +46,11 @@ public class WorkSituation   {
     this.situId = situId;
   }
 
-  public WorkSituation modeCode(String modeCode) {
-    this.modeCode = modeCode;
-    return this;
-  }
-
   /**
    * Get modeCode
    * @return modeCode
   */
   @ApiModelProperty(value = "")
-
 @Size(min = 1) 
   public String getModeCode() {
     return modeCode;
@@ -72,18 +60,12 @@ public class WorkSituation   {
     this.modeCode = modeCode;
   }
 
-  public WorkSituation activitySectorCode(String activitySectorCode) {
-    this.activitySectorCode = activitySectorCode;
-    return this;
-  }
-
   /**
    * Get activitySectorCode
    * @return activitySectorCode
   */
   @ApiModelProperty(value = "")
-
-@Size(min = 1) 
+@Size(min = 0) 
   public String getActivitySectorCode() {
     return activitySectorCode;
   }
@@ -92,18 +74,12 @@ public class WorkSituation   {
     this.activitySectorCode = activitySectorCode;
   }
 
-  public WorkSituation pharmacistTableSectionCode(String pharmacistTableSectionCode) {
-    this.pharmacistTableSectionCode = pharmacistTableSectionCode;
-    return this;
-  }
-
   /**
    * Get pharmacistTableSectionCode
    * @return pharmacistTableSectionCode
   */
   @ApiModelProperty(value = "")
-
-@Size(min = 1) 
+@Size(min = 0) 
   public String getPharmacistTableSectionCode() {
     return pharmacistTableSectionCode;
   }
@@ -112,18 +88,12 @@ public class WorkSituation   {
     this.pharmacistTableSectionCode = pharmacistTableSectionCode;
   }
 
-  public WorkSituation roleCode(String roleCode) {
-    this.roleCode = roleCode;
-    return this;
-  }
-
   /**
    * Get roleCode
    * @return roleCode
   */
   @ApiModelProperty(value = "")
-
-@Size(min = 1) 
+@Size(min = 0) 
   public String getRoleCode() {
     return roleCode;
   }
@@ -132,27 +102,12 @@ public class WorkSituation   {
     this.roleCode = roleCode;
   }
 
-  public WorkSituation structures(List<Structure> structures) {
-    this.structures = structures;
-    return this;
-  }
-
-  public WorkSituation addStructuresItem(Structure structuresItem) {
-    if (this.structures == null) {
-      this.structures = new ArrayList<Structure>();
-    }
-    this.structures.add(structuresItem);
-    return this;
-  }
-
   /**
    * Get structures
    * @return structures
   */
   @ApiModelProperty(value = "")
-
   @Valid
-
   public List<Structure> getStructures() {
     return structures;
   }

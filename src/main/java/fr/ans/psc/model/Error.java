@@ -1,43 +1,44 @@
 package fr.ans.psc.model;
 
+import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModelProperty;
-
-import java.util.Objects;
+import java.util.List;
+import javax.validation.Valid;
 
 /**
  * Error
  */
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2021-12-07T17:22:10.562370300+01:00[Europe/Paris]")
 public class Error   {
-  @JsonProperty("code")
-  private String code;
+  @JsonProperty("httpStatus")
+  private int httpStatus;
 
   @JsonProperty("message")
-  private String message;
+  @Valid
+  private List<String> message = null;
 
-  public Error code(String code) {
-    this.code = code;
-    return this;
+
+  public Error() {
+  }
+
+  public Error(int httpStatus, @Valid List<String> message) {
+    this.httpStatus = httpStatus;
+    this.message = message;
   }
 
   /**
-   * Get code
-   * @return code
+   * Get httpStatus
+   * @return httpStatus
   */
   @ApiModelProperty(value = "")
-
-
-  public String getCode() {
-    return code;
+  @Valid
+  public int getHttpStatus() {
+    return httpStatus;
   }
 
-  public void setCode(String code) {
-    this.code = code;
-  }
-
-  public Error message(String message) {
-    this.message = message;
-    return this;
+  public void setHttpStatus(int httpStatus) {
+    this.httpStatus = httpStatus;
   }
 
   /**
@@ -45,13 +46,11 @@ public class Error   {
    * @return message
   */
   @ApiModelProperty(value = "")
-
-
-  public String getMessage() {
+  public List<String> getMessage() {
     return message;
   }
 
-  public void setMessage(String message) {
+  public void setMessage(List<String> message) {
     this.message = message;
   }
 
@@ -65,13 +64,13 @@ public class Error   {
       return false;
     }
     Error error = (Error) o;
-    return Objects.equals(this.code, error.code) &&
+    return Objects.equals(this.httpStatus, error.httpStatus) &&
         Objects.equals(this.message, error.message);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(code, message);
+    return Objects.hash(httpStatus, message);
   }
 
   @Override
@@ -79,7 +78,7 @@ public class Error   {
     StringBuilder sb = new StringBuilder();
     sb.append("class Error {\n");
     
-    sb.append("    code: ").append(toIndentedString(code)).append("\n");
+    sb.append("    httpStatus: ").append(toIndentedString(httpStatus)).append("\n");
     sb.append("    message: ").append(toIndentedString(message)).append("\n");
     sb.append("}");
     return sb.toString();

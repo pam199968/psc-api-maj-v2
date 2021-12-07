@@ -1,8 +1,5 @@
 package fr.ans.psc.utils;
 
-import fr.ans.psc.model.Ps;
-
-import java.io.File;
 import java.util.Date;
 
 public class ApiUtils {

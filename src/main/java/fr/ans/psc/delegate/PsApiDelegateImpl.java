@@ -49,27 +49,6 @@ public class PsApiDelegateImpl extends AbstractApiDelegate implements PsApiDeleg
 
     @Override
     public ResponseEntity<Void> createNewPs(Ps ps) {
-        Ps storedPs = psRepository.findByNationalId(ps.getNationalId());
-
-        // check if Ps already exists
-        if (storedPs != null) {
-            log.warn("Ps {} already exists", ps.getNationalId());
-            return new ResponseEntity<>(HttpStatus.CONFLICT);
-        }
-
-        mongoTemplate.save(ps);
-        log.info("Ps {} newly created", ps.getNationalId());
-
-        // create PsLink as well
-        PsRef psRef = new PsRef(ps.getNationalId(), ps.getNationalId(), ApiUtils.getInstantTimestamp());
-        mongoTemplate.save(psRef);
-        log.info("PsRef {} newly created", ps.getNationalId());
-
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
-
-    @Override
-    public ResponseEntity<Void> psForceCreate(Ps ps) {
         // set mongo _id to avoid error if it's an update
         Ps storedPs = psRepository.findByNationalId(ps.getNationalId());
         if (storedPs != null) {
@@ -111,11 +90,11 @@ public class PsApiDelegateImpl extends AbstractApiDelegate implements PsApiDeleg
     }
 
     @Override
-    public ResponseEntity<Void> updatePsById(String psId, Ps ps) {
+    public ResponseEntity<Void> updatePs(Ps ps) {
         // check that the Ps exist AND that the psRef is activated
-        List<PsRef> psRefList = psRefRepository.findAllByNationalId(psId);
+        List<PsRef> psRefList = psRefRepository.findAllByNationalId(ps.getNationalId());
 
-        Ps storedPs = psRepository.findByNationalId(psId);
+        Ps storedPs = psRepository.findByNationalId(ps.getNationalId());
         if (storedPs == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }

@@ -111,7 +111,7 @@ public class PsOperationTest {
                 "                  \"siteSIREN\": null,\n" +
                 "                  \"siteFINESS\": null,\n" +
                 "                  \"legalEstablishmentFINESS\": null,\n" +
-                "                  \"structureTechnicalId\": null,\n" +
+                "                  \"structureTechnicalId\": \"1\",\n" +
                 "                  \"legalCommercialName\": null,\n" +
                 "                  \"publicCommercialName\": null,\n" +
                 "                  \"recipientAdditionalInfo\": null,\n" +

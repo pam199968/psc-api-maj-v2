@@ -65,20 +65,4 @@ public abstract class AbstractApiDelegate {
 				 || acceptheaders.contains(HEADER_TYPE_APP_WILDCARD)
 				 || acceptheaders.contains(HEADER_TYPE_FULL_WILDCARD));
 	}
-
-	protected void throwExceptionRequestError(Exception e, String msg, HttpStatus status) {
-		log.debug("Requête en echec. Message retourné à l'utilisateur: {}", msg);
-		log.debug("classe Exception: {}", e.getClass().getName());
-		log.debug("cause de l'eException: ", e.getCause());
-		log.debug("message de l'exception {}", e.getMessage());
-		throwExceptionRequestError(msg, status);
-	}
-
-	protected void throwExceptionRequestError(String msg, HttpStatus status) {
-		var erreur = new fr.ans.psc.model.Error();
-		erreur.setCode(status.toString());
-		erreur.setMessage(msg);
-		throw new PscRequestException(erreur, status);
-	}
-
 }

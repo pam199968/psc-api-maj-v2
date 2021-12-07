@@ -1,24 +1,23 @@
 package fr.ans.psc.model;
 
+import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.index.IndexDirection;
-import org.springframework.data.mongodb.core.index.Indexed;
-import org.springframework.data.mongodb.core.mapping.Document;
 
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
+import javax.validation.Valid;
+import javax.validation.constraints.*;
 
 /**
- * Ps
+ * Professionnel de santé
  */
-@Document(collection = "ps")
+@ApiModel(description = "Professionnel de santé")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2021-12-07T17:22:10.562370300+01:00[Europe/Paris]")
 public class Ps   {
+
   @Id
   private String _id;
 
@@ -29,8 +28,6 @@ public class Ps   {
   private String id;
 
   @JsonProperty("nationalId")
-  @Indexed(unique = true)
-  @NotNull(message = "nationalId should not be null")
   private String nationalId;
 
   @JsonProperty("lastName")
@@ -67,6 +64,7 @@ public class Ps   {
   @Valid
   private List<Profession> professions = null;
 
+
   public String get_id() {
     return _id;
   }
@@ -74,13 +72,12 @@ public class Ps   {
   public void set_id(String _id) {
     this._id = _id;
   }
+
   /**
    * Get idType
    * @return idType
   */
   @ApiModelProperty(value = "")
-
-@Size(min = 1) 
   public String getIdType() {
     return idType;
   }
@@ -89,18 +86,11 @@ public class Ps   {
     this.idType = idType;
   }
 
-  public Ps id(String id) {
-    this.id = id;
-    return this;
-  }
-
   /**
    * Get id
    * @return id
   */
   @ApiModelProperty(value = "")
-
-@Size(min = 1) 
   public String getId() {
     return id;
   }
@@ -109,18 +99,12 @@ public class Ps   {
     this.id = id;
   }
 
-  public Ps nationalId(String nationalId) {
-    this.nationalId = nationalId;
-    return this;
-  }
-
   /**
    * Get nationalId
    * @return nationalId
   */
   @ApiModelProperty(required = true, value = "")
-  @NotNull(message = "getter null")
-
+  @NotNull
 @Size(min = 1) 
   public String getNationalId() {
     return nationalId;
@@ -130,18 +114,11 @@ public class Ps   {
     this.nationalId = nationalId;
   }
 
-  public Ps lastName(String lastName) {
-    this.lastName = lastName;
-    return this;
-  }
-
   /**
    * Get lastName
    * @return lastName
   */
   @ApiModelProperty(value = "")
-
-@Size(min = 1) 
   public String getLastName() {
     return lastName;
   }
@@ -150,18 +127,11 @@ public class Ps   {
     this.lastName = lastName;
   }
 
-  public Ps firstName(String firstName) {
-    this.firstName = firstName;
-    return this;
-  }
-
   /**
    * Get firstName
    * @return firstName
   */
   @ApiModelProperty(value = "")
-
-@Size(min = 1) 
   public String getFirstName() {
     return firstName;
   }
@@ -170,18 +140,11 @@ public class Ps   {
     this.firstName = firstName;
   }
 
-  public Ps dateOfBirth(String dateOfBirth) {
-    this.dateOfBirth = dateOfBirth;
-    return this;
-  }
-
   /**
    * Get dateOfBirth
    * @return dateOfBirth
   */
   @ApiModelProperty(value = "")
-
-@Size(min = 1) 
   public String getDateOfBirth() {
     return dateOfBirth;
   }
@@ -190,18 +153,11 @@ public class Ps   {
     this.dateOfBirth = dateOfBirth;
   }
 
-  public Ps birthAddressCode(String birthAddressCode) {
-    this.birthAddressCode = birthAddressCode;
-    return this;
-  }
-
   /**
    * Get birthAddressCode
    * @return birthAddressCode
   */
   @ApiModelProperty(value = "")
-
-@Size(min = 1) 
   public String getBirthAddressCode() {
     return birthAddressCode;
   }
@@ -210,18 +166,11 @@ public class Ps   {
     this.birthAddressCode = birthAddressCode;
   }
 
-  public Ps birthCountryCode(String birthCountryCode) {
-    this.birthCountryCode = birthCountryCode;
-    return this;
-  }
-
   /**
    * Get birthCountryCode
    * @return birthCountryCode
   */
   @ApiModelProperty(value = "")
-
-@Size(min = 1) 
   public String getBirthCountryCode() {
     return birthCountryCode;
   }
@@ -230,18 +179,11 @@ public class Ps   {
     this.birthCountryCode = birthCountryCode;
   }
 
-  public Ps birthAddress(String birthAddress) {
-    this.birthAddress = birthAddress;
-    return this;
-  }
-
   /**
    * Get birthAddress
    * @return birthAddress
   */
   @ApiModelProperty(value = "")
-
-@Size(min = 1) 
   public String getBirthAddress() {
     return birthAddress;
   }
@@ -250,18 +192,11 @@ public class Ps   {
     this.birthAddress = birthAddress;
   }
 
-  public Ps genderCode(String genderCode) {
-    this.genderCode = genderCode;
-    return this;
-  }
-
   /**
    * Get genderCode
    * @return genderCode
   */
   @ApiModelProperty(value = "")
-
-@Size(min = 1) 
   public String getGenderCode() {
     return genderCode;
   }
@@ -270,18 +205,11 @@ public class Ps   {
     this.genderCode = genderCode;
   }
 
-  public Ps phone(String phone) {
-    this.phone = phone;
-    return this;
-  }
-
   /**
    * Get phone
    * @return phone
   */
   @ApiModelProperty(value = "")
-
-@Size(min = 1) 
   public String getPhone() {
     return phone;
   }
@@ -290,18 +218,11 @@ public class Ps   {
     this.phone = phone;
   }
 
-  public Ps email(String email) {
-    this.email = email;
-    return this;
-  }
-
   /**
    * Get email
    * @return email
   */
   @ApiModelProperty(value = "")
-
-@Size(min = 1) 
   public String getEmail() {
     return email;
   }
@@ -310,18 +231,11 @@ public class Ps   {
     this.email = email;
   }
 
-  public Ps salutationCode(String salutationCode) {
-    this.salutationCode = salutationCode;
-    return this;
-  }
-
   /**
    * Get salutationCode
    * @return salutationCode
   */
   @ApiModelProperty(value = "")
-
-@Size(min = 1) 
   public String getSalutationCode() {
     return salutationCode;
   }
@@ -330,27 +244,12 @@ public class Ps   {
     this.salutationCode = salutationCode;
   }
 
-  public Ps professions(List<Profession> professions) {
-    this.professions = professions;
-    return this;
-  }
-
-  public Ps addProfessionsItem(Profession professionsItem) {
-    if (this.professions == null) {
-      this.professions = new ArrayList<Profession>();
-    }
-    this.professions.add(professionsItem);
-    return this;
-  }
-
   /**
    * Get professions
    * @return professions
   */
   @ApiModelProperty(value = "")
-
   @Valid
-
   public List<Profession> getProfessions() {
     return professions;
   }

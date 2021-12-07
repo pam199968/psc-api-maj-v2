@@ -1,37 +1,28 @@
 package fr.ans.psc.model;
 
+import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.index.Indexed;
-import org.springframework.data.mongodb.core.mapping.Document;
 
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
-import java.util.Objects;
+import javax.validation.constraints.*;
 
 /**
- * PsRef
+ * Mapping identifier to Ps
  */
-@Document(collection = "psref")
+@ApiModel(description = "Mapping identifier to Ps")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2021-12-07T17:22:10.562370300+01:00[Europe/Paris]")
 public class PsRef   {
+
   @Id
   private String _id;
 
   @JsonProperty("nationalIdRef")
-  @Indexed(unique = true)
   private String nationalIdRef;
 
   @JsonProperty("nationalId")
   private String nationalId;
-
-  public String get_id() {
-    return _id;
-  }
-
-  public void set_id(String _id) {
-    this._id = _id;
-  }
 
   @JsonProperty("activated")
   private Long activated;
@@ -48,18 +39,12 @@ public class PsRef   {
     this.activated = activated;
   }
 
-  public PsRef nationalIdRef(String nationalIdRef) {
-    this.nationalIdRef = nationalIdRef;
-    return this;
-  }
-
   /**
    * Get nationalIdRef
    * @return nationalIdRef
   */
   @ApiModelProperty(required = true, value = "")
   @NotNull
-
 @Size(min = 1) 
   public String getNationalIdRef() {
     return nationalIdRef;
@@ -69,18 +54,12 @@ public class PsRef   {
     this.nationalIdRef = nationalIdRef;
   }
 
-  public PsRef nationalId(String nationalId) {
-    this.nationalId = nationalId;
-    return this;
-  }
-
   /**
    * Get nationalId
    * @return nationalId
   */
   @ApiModelProperty(required = true, value = "")
   @NotNull
-
 @Size(min = 1) 
   public String getNationalId() {
     return nationalId;
@@ -90,18 +69,11 @@ public class PsRef   {
     this.nationalId = nationalId;
   }
 
-  public PsRef activated(Long activated) {
-    this.activated = activated;
-    return this;
-  }
-
   /**
    * Get activated
    * @return activated
   */
   @ApiModelProperty(value = "")
-
-@Size(min = 1) 
   public Long getActivated() {
     return activated;
   }
@@ -109,19 +81,11 @@ public class PsRef   {
   public void setActivated(Long activated) {
     this.activated = activated;
   }
-
-  public PsRef deactivated(Long deactivated) {
-    this.deactivated = deactivated;
-    return this;
-  }
-
   /**
    * Get deactivated
    * @return deactivated
   */
   @ApiModelProperty(value = "")
-
-@Size(min = 1) 
   public Long getDeactivated() {
     return deactivated;
   }

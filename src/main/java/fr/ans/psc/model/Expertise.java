@@ -1,14 +1,15 @@
 package fr.ans.psc.model;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import io.swagger.annotations.ApiModelProperty;
-
-import javax.validation.constraints.Size;
 import java.util.Objects;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 
 /**
  * Expertise
  */
+@ApiModel(description = "Expertise")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2021-12-07T17:22:10.562370300+01:00[Europe/Paris]")
 public class Expertise   {
   @JsonProperty("expertiseId")
   private String expertiseId;
@@ -19,18 +20,11 @@ public class Expertise   {
   @JsonProperty("code")
   private String code;
 
-  public Expertise expertiseId(String expertiseId) {
-    this.expertiseId = expertiseId;
-    return this;
-  }
-
   /**
    * Get expertiseId
    * @return expertiseId
   */
   @ApiModelProperty(value = "")
-
-@Size(min = 1) 
   public String getExpertiseId() {
     return expertiseId;
   }
@@ -39,18 +33,11 @@ public class Expertise   {
     this.expertiseId = expertiseId;
   }
 
-  public Expertise typeCode(String typeCode) {
-    this.typeCode = typeCode;
-    return this;
-  }
-
   /**
    * Get typeCode
    * @return typeCode
   */
   @ApiModelProperty(value = "")
-
-@Size(min = 1) 
   public String getTypeCode() {
     return typeCode;
   }
@@ -59,18 +46,11 @@ public class Expertise   {
     this.typeCode = typeCode;
   }
 
-  public Expertise code(String code) {
-    this.code = code;
-    return this;
-  }
-
   /**
    * Get code
    * @return code
   */
   @ApiModelProperty(value = "")
-
-@Size(min = 1) 
   public String getCode() {
     return code;
   }

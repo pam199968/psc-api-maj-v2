@@ -1,33 +1,25 @@
 package fr.ans.psc.model;
 
+import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.index.Indexed;
-import org.springframework.data.mongodb.core.mapping.Document;
 
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
-import java.util.Objects;
+import javax.validation.constraints.*;
 
 /**
- * Structure
+ * Structure de Santé
  */
-@Document(collection = "structure")
+@ApiModel(description = "Structure de Santé")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2021-12-07T17:22:10.562370300+01:00[Europe/Paris]")
 public class Structure   {
+
   @Id
   private String _id;
 
   @JsonProperty("siteSIRET")
   private String siteSIRET;
-
-  public String get_id() {
-    return _id;
-  }
-
-  public void set_id(String _id) {
-    this._id = _id;
-  }
 
   @JsonProperty("siteSIREN")
   private String siteSIREN;
@@ -39,7 +31,6 @@ public class Structure   {
   private String legalEstablishmentFINESS;
 
   @JsonProperty("structureTechnicalId")
-  @Indexed(unique = true)
   private String structureTechnicalId;
 
   @JsonProperty("legalCommercialName")
@@ -102,9 +93,13 @@ public class Structure   {
   @JsonProperty("registrationAuthority")
   private String registrationAuthority;
 
-  public Structure siteSIRET(String siteSIRET) {
-    this.siteSIRET = siteSIRET;
-    return this;
+
+  public String get_id() {
+    return _id;
+  }
+
+  public void set_id(String _id) {
+    this._id = _id;
   }
 
   /**
@@ -112,8 +107,6 @@ public class Structure   {
    * @return siteSIRET
   */
   @ApiModelProperty(value = "")
-
-@Size(min = 1) 
   public String getSiteSIRET() {
     return siteSIRET;
   }
@@ -122,18 +115,11 @@ public class Structure   {
     this.siteSIRET = siteSIRET;
   }
 
-  public Structure siteSIREN(String siteSIREN) {
-    this.siteSIREN = siteSIREN;
-    return this;
-  }
-
   /**
    * Get siteSIREN
    * @return siteSIREN
   */
   @ApiModelProperty(value = "")
-
-@Size(min = 1) 
   public String getSiteSIREN() {
     return siteSIREN;
   }
@@ -142,18 +128,11 @@ public class Structure   {
     this.siteSIREN = siteSIREN;
   }
 
-  public Structure siteFINESS(String siteFINESS) {
-    this.siteFINESS = siteFINESS;
-    return this;
-  }
-
   /**
    * Get siteFINESS
    * @return siteFINESS
   */
   @ApiModelProperty(value = "")
-
-@Size(min = 1) 
   public String getSiteFINESS() {
     return siteFINESS;
   }
@@ -162,18 +141,11 @@ public class Structure   {
     this.siteFINESS = siteFINESS;
   }
 
-  public Structure legalEstablishmentFINESS(String legalEstablishmentFINESS) {
-    this.legalEstablishmentFINESS = legalEstablishmentFINESS;
-    return this;
-  }
-
   /**
    * Get legalEstablishmentFINESS
    * @return legalEstablishmentFINESS
   */
   @ApiModelProperty(value = "")
-
-@Size(min = 1) 
   public String getLegalEstablishmentFINESS() {
     return legalEstablishmentFINESS;
   }
@@ -182,18 +154,12 @@ public class Structure   {
     this.legalEstablishmentFINESS = legalEstablishmentFINESS;
   }
 
-  public Structure structureTechnicalId(String structureTechnicalId) {
-    this.structureTechnicalId = structureTechnicalId;
-    return this;
-  }
-
   /**
    * Get structureTechnicalId
    * @return structureTechnicalId
   */
   @ApiModelProperty(required = true, value = "")
   @NotNull
-
 @Size(min = 1) 
   public String getStructureTechnicalId() {
     return structureTechnicalId;
@@ -203,18 +169,11 @@ public class Structure   {
     this.structureTechnicalId = structureTechnicalId;
   }
 
-  public Structure legalCommercialName(String legalCommercialName) {
-    this.legalCommercialName = legalCommercialName;
-    return this;
-  }
-
   /**
    * Get legalCommercialName
    * @return legalCommercialName
   */
   @ApiModelProperty(value = "")
-
-@Size(min = 1) 
   public String getLegalCommercialName() {
     return legalCommercialName;
   }
@@ -223,18 +182,11 @@ public class Structure   {
     this.legalCommercialName = legalCommercialName;
   }
 
-  public Structure publicCommercialName(String publicCommercialName) {
-    this.publicCommercialName = publicCommercialName;
-    return this;
-  }
-
   /**
    * Get publicCommercialName
    * @return publicCommercialName
   */
   @ApiModelProperty(value = "")
-
-@Size(min = 1) 
   public String getPublicCommercialName() {
     return publicCommercialName;
   }
@@ -243,18 +195,11 @@ public class Structure   {
     this.publicCommercialName = publicCommercialName;
   }
 
-  public Structure recipientAdditionalInfo(String recipientAdditionalInfo) {
-    this.recipientAdditionalInfo = recipientAdditionalInfo;
-    return this;
-  }
-
   /**
    * Get recipientAdditionalInfo
    * @return recipientAdditionalInfo
   */
   @ApiModelProperty(value = "")
-
-@Size(min = 1) 
   public String getRecipientAdditionalInfo() {
     return recipientAdditionalInfo;
   }
@@ -263,18 +208,11 @@ public class Structure   {
     this.recipientAdditionalInfo = recipientAdditionalInfo;
   }
 
-  public Structure geoLocationAdditionalInfo(String geoLocationAdditionalInfo) {
-    this.geoLocationAdditionalInfo = geoLocationAdditionalInfo;
-    return this;
-  }
-
   /**
    * Get geoLocationAdditionalInfo
    * @return geoLocationAdditionalInfo
   */
   @ApiModelProperty(value = "")
-
-@Size(min = 1) 
   public String getGeoLocationAdditionalInfo() {
     return geoLocationAdditionalInfo;
   }
@@ -283,18 +221,11 @@ public class Structure   {
     this.geoLocationAdditionalInfo = geoLocationAdditionalInfo;
   }
 
-  public Structure streetNumber(String streetNumber) {
-    this.streetNumber = streetNumber;
-    return this;
-  }
-
   /**
    * Get streetNumber
    * @return streetNumber
   */
   @ApiModelProperty(value = "")
-
-@Size(min = 1) 
   public String getStreetNumber() {
     return streetNumber;
   }
@@ -303,18 +234,11 @@ public class Structure   {
     this.streetNumber = streetNumber;
   }
 
-  public Structure streetNumberRepetitionIndex(String streetNumberRepetitionIndex) {
-    this.streetNumberRepetitionIndex = streetNumberRepetitionIndex;
-    return this;
-  }
-
   /**
    * Get streetNumberRepetitionIndex
    * @return streetNumberRepetitionIndex
   */
   @ApiModelProperty(value = "")
-
-@Size(min = 1) 
   public String getStreetNumberRepetitionIndex() {
     return streetNumberRepetitionIndex;
   }
@@ -323,18 +247,11 @@ public class Structure   {
     this.streetNumberRepetitionIndex = streetNumberRepetitionIndex;
   }
 
-  public Structure streetCategoryCode(String streetCategoryCode) {
-    this.streetCategoryCode = streetCategoryCode;
-    return this;
-  }
-
   /**
    * Get streetCategoryCode
    * @return streetCategoryCode
   */
   @ApiModelProperty(value = "")
-
-@Size(min = 1) 
   public String getStreetCategoryCode() {
     return streetCategoryCode;
   }
@@ -343,18 +260,11 @@ public class Structure   {
     this.streetCategoryCode = streetCategoryCode;
   }
 
-  public Structure streetLabel(String streetLabel) {
-    this.streetLabel = streetLabel;
-    return this;
-  }
-
   /**
    * Get streetLabel
    * @return streetLabel
   */
   @ApiModelProperty(value = "")
-
-@Size(min = 1) 
   public String getStreetLabel() {
     return streetLabel;
   }
@@ -363,18 +273,11 @@ public class Structure   {
     this.streetLabel = streetLabel;
   }
 
-  public Structure distributionMention(String distributionMention) {
-    this.distributionMention = distributionMention;
-    return this;
-  }
-
   /**
    * Get distributionMention
    * @return distributionMention
   */
   @ApiModelProperty(value = "")
-
-@Size(min = 1) 
   public String getDistributionMention() {
     return distributionMention;
   }
@@ -383,18 +286,11 @@ public class Structure   {
     this.distributionMention = distributionMention;
   }
 
-  public Structure cedexOffice(String cedexOffice) {
-    this.cedexOffice = cedexOffice;
-    return this;
-  }
-
   /**
    * Get cedexOffice
    * @return cedexOffice
   */
   @ApiModelProperty(value = "")
-
-@Size(min = 1) 
   public String getCedexOffice() {
     return cedexOffice;
   }
@@ -402,19 +298,11 @@ public class Structure   {
   public void setCedexOffice(String cedexOffice) {
     this.cedexOffice = cedexOffice;
   }
-
-  public Structure postalCode(String postalCode) {
-    this.postalCode = postalCode;
-    return this;
-  }
-
   /**
    * Get postalCode
    * @return postalCode
   */
   @ApiModelProperty(value = "")
-
-@Size(min = 1) 
   public String getPostalCode() {
     return postalCode;
   }
@@ -423,18 +311,11 @@ public class Structure   {
     this.postalCode = postalCode;
   }
 
-  public Structure communeCode(String communeCode) {
-    this.communeCode = communeCode;
-    return this;
-  }
-
   /**
    * Get communeCode
    * @return communeCode
   */
   @ApiModelProperty(value = "")
-
-@Size(min = 1) 
   public String getCommuneCode() {
     return communeCode;
   }
@@ -443,18 +324,11 @@ public class Structure   {
     this.communeCode = communeCode;
   }
 
-  public Structure countryCode(String countryCode) {
-    this.countryCode = countryCode;
-    return this;
-  }
-
   /**
    * Get countryCode
    * @return countryCode
   */
   @ApiModelProperty(value = "")
-
-@Size(min = 1) 
   public String getCountryCode() {
     return countryCode;
   }
@@ -463,18 +337,11 @@ public class Structure   {
     this.countryCode = countryCode;
   }
 
-  public Structure phone(String phone) {
-    this.phone = phone;
-    return this;
-  }
-
   /**
    * Get phone
    * @return phone
   */
   @ApiModelProperty(value = "")
-
-@Size(min = 1) 
   public String getPhone() {
     return phone;
   }
@@ -483,18 +350,11 @@ public class Structure   {
     this.phone = phone;
   }
 
-  public Structure phone2(String phone2) {
-    this.phone2 = phone2;
-    return this;
-  }
-
   /**
    * Get phone2
    * @return phone2
   */
   @ApiModelProperty(value = "")
-
-@Size(min = 1) 
   public String getPhone2() {
     return phone2;
   }
@@ -503,18 +363,11 @@ public class Structure   {
     this.phone2 = phone2;
   }
 
-  public Structure fax(String fax) {
-    this.fax = fax;
-    return this;
-  }
-
   /**
    * Get fax
    * @return fax
   */
   @ApiModelProperty(value = "")
-
-@Size(min = 1) 
   public String getFax() {
     return fax;
   }
@@ -523,18 +376,11 @@ public class Structure   {
     this.fax = fax;
   }
 
-  public Structure email(String email) {
-    this.email = email;
-    return this;
-  }
-
   /**
    * Get email
    * @return email
   */
   @ApiModelProperty(value = "")
-
-@Size(min = 1) 
   public String getEmail() {
     return email;
   }
@@ -542,19 +388,11 @@ public class Structure   {
   public void setEmail(String email) {
     this.email = email;
   }
-
-  public Structure departmentCode(String departmentCode) {
-    this.departmentCode = departmentCode;
-    return this;
-  }
-
   /**
    * Get departmentCode
    * @return departmentCode
   */
   @ApiModelProperty(value = "")
-
-@Size(min = 1) 
   public String getDepartmentCode() {
     return departmentCode;
   }
@@ -563,18 +401,11 @@ public class Structure   {
     this.departmentCode = departmentCode;
   }
 
-  public Structure oldStructureId(String oldStructureId) {
-    this.oldStructureId = oldStructureId;
-    return this;
-  }
-
   /**
    * Get oldStructureId
    * @return oldStructureId
   */
   @ApiModelProperty(value = "")
-
-@Size(min = 1) 
   public String getOldStructureId() {
     return oldStructureId;
   }
@@ -583,18 +414,11 @@ public class Structure   {
     this.oldStructureId = oldStructureId;
   }
 
-  public Structure registrationAuthority(String registrationAuthority) {
-    this.registrationAuthority = registrationAuthority;
-    return this;
-  }
-
   /**
    * Get registrationAuthority
    * @return registrationAuthority
   */
   @ApiModelProperty(value = "")
-
-@Size(min = 1) 
   public String getRegistrationAuthority() {
     return registrationAuthority;
   }
