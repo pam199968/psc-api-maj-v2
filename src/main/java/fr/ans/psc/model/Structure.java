@@ -5,14 +5,16 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.validation.constraints.*;
 
 /**
  * Structure de Santé
  */
+@Document(collection = "structure")
 @ApiModel(description = "Structure de Santé")
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2021-12-07T17:22:10.562370300+01:00[Europe/Paris]")
 public class Structure   {
 
   @Id
@@ -31,6 +33,8 @@ public class Structure   {
   private String legalEstablishmentFINESS;
 
   @JsonProperty("structureTechnicalId")
+  @Indexed(unique = true)
+  @NotNull(message = "structure technical id should not be null")
   private String structureTechnicalId;
 
   @JsonProperty("legalCommercialName")

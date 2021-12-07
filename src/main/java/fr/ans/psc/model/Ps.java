@@ -5,8 +5,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.util.ArrayList;
 import java.util.List;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
@@ -14,8 +15,8 @@ import javax.validation.constraints.*;
 /**
  * Professionnel de santé
  */
+@Document(collection = "ps")
 @ApiModel(description = "Professionnel de santé")
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2021-12-07T17:22:10.562370300+01:00[Europe/Paris]")
 public class Ps   {
 
   @Id
@@ -28,6 +29,8 @@ public class Ps   {
   private String id;
 
   @JsonProperty("nationalId")
+  @Indexed(unique = true)
+  @NotNull(message = "nationalId should not be null")
   private String nationalId;
 
   @JsonProperty("lastName")

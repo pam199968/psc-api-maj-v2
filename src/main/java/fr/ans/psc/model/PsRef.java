@@ -5,23 +5,28 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.validation.constraints.*;
 
 /**
  * Mapping identifier to Ps
  */
+@Document(collection = "psref")
 @ApiModel(description = "Mapping identifier to Ps")
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2021-12-07T17:22:10.562370300+01:00[Europe/Paris]")
 public class PsRef   {
 
   @Id
   private String _id;
 
+  @Indexed(unique = true)
+  @NotNull(message = "nationalIdRef should not be null")
   @JsonProperty("nationalIdRef")
   private String nationalIdRef;
 
   @JsonProperty("nationalId")
+  @NotNull(message = "nationalId should not be null")
   private String nationalId;
 
   @JsonProperty("activated")
@@ -37,6 +42,14 @@ public class PsRef   {
     this.nationalIdRef = nationalIdRef;
     this.nationalId = nationalId;
     this.activated = activated;
+  }
+
+  public String get_id() {
+    return _id;
+  }
+
+  public void set_id(String _id) {
+    this._id = _id;
   }
 
   /**

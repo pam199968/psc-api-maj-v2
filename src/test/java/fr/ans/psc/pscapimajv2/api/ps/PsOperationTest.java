@@ -192,7 +192,7 @@ public class PsOperationTest {
     public void createMalformedPsFailed() throws Exception {
         mockMvc.perform(post("/api/v1/ps").header("Accept", "application/json")
                 .contentType("application/json").content("{\"toto\":\"titi\"}"))
-                .andExpect(status().is4xxClientError()).andDo(print());
+                .andExpect(status().is(400)).andDo(print());
     }
 
 
