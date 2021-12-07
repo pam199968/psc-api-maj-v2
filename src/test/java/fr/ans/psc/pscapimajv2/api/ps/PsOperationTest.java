@@ -1,11 +1,10 @@
 package fr.ans.psc.pscapimajv2.api.ps;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.assertj.core.api.Assertions.*;
 
 import ch.qos.logback.classic.LoggerContext;
@@ -15,6 +14,7 @@ import fr.ans.psc.PscApiMajApplication;
 import fr.ans.psc.delegate.PsApiDelegateImpl;
 import fr.ans.psc.utils.MemoryAppender;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
@@ -64,8 +64,9 @@ public class PsOperationTest {
     }
 
     @Test
+    @DisplayName(value = "should get Ps by id, nominal case")
     @MongoDataSet(value = "/dataset/ps_2_psref_entries.json", cleanBefore = true, cleanAfter = true)
-    public void shouldGetPsByIdNominalCase() throws Exception {
+    public void getPsById() throws Exception {
 
         String body = "{\n" +
                 "      \"idType\": \"8\",\n" +
@@ -144,11 +145,20 @@ public class PsOperationTest {
 
         returned.andExpect(content().json(body));
         assertThat(memoryAppender.contains("Ps 800000000001 has been found", Level.INFO)).isTrue();
+
+        ResultActions returned2 = mockMvc.perform(get("/api/v1/ps/800000000011")
+                .header("Accept", "application/json"))
+                .andExpect(status().is2xxSuccessful());
+
+        returned.andExpect(content().json(body));
+        assertThat(memoryAppender.contains("Ps 800000000001 has been found", Level.INFO)).isTrue();
+
     }
 
     @Test
+    @DisplayName(value = "should not get Ps if deactivated")
     @MongoDataSet(value = "/dataset/deactivated_ps.json", cleanBefore = true, cleanAfter = true)
-    public void shouldNotGetPsIfDeactivated() throws Exception {
+    public void getPsDeactivated() throws Exception {
         mockMvc.perform(get("/api/v1/ps/800000000002")
                 .header("Accept", "application/json"))
                 .andExpect(status().is(404));
@@ -156,8 +166,9 @@ public class PsOperationTest {
     }
 
     @Test
-    @MongoDataSet(value = "/dataset/deactivated_ps.json", cleanBefore = true, cleanAfter = true)
-    public void shouldNotGetPsIfNotExist() throws Exception {
+    @DisplayName(value = "should not get Ps if not exist")
+    @MongoDataSet(value = "/dataset/ps_2_psref_entries.json", cleanBefore = true, cleanAfter = true)
+    public void getNotExistingPs() throws Exception {
         mockMvc.perform(get("/api/v1/ps/800000000003")
                 .header("Accept", "application/json"))
                 .andExpect(status().is(404));
@@ -165,31 +176,59 @@ public class PsOperationTest {
     }
 
     @Test
+    @DisplayName(value = "should create a new Ps")
     public void createNewPs() {
 
-        // cas nominal : create OK
-
-        // il existe déjà un Ps avec le même idNat
-
-        // le body de la requête est mal formé
     }
 
     @Test
+    @DisplayName(value = "should not create Ps if already exists")
+    public void createExistingPsFailed() {
+    }
+
+    @Test
+    @DisplayName(value = "should not create Ps if malformed request body")
+    public void createMalformedPsFailed() throws Exception {
+//        mockMvc.perform(post("/api/v1/ps").header("Accept", "application/json")
+//                .contentType("application/json").content("{\"toto\":\"titi\"}"))
+//                .andExpect(status().is5xxServerError());
+    }
+
+
+    @Test
+    @DisplayName(value = "should delete Ps by Id")
     public void deletePsById() {
 
-        // cas nominal : delete OK
-
-        // il n'y a pas de Ps avec le même idNat
     }
 
     @Test
+    @DisplayName(value = "should not delete Ps if not exists")
+    public void deletePsFailed() {
+
+    }
+
+    @Test
+    @DisplayName(value = "should update Ps")
     public void updatePsById() {
 
-        // cas nominal : update OK
+    }
 
-        // il n'existe pas de Ps avec le même idNat
+    @Test
+    @DisplayName(value = "should not update Ps if not exists")
+    public void updateAbsentPsFailed() {
 
-        // le body de la requête est mal formé
+    }
+
+    @Test
+    @DisplayName(value = "should not update Ps if malformed request body")
+    public void updateMalformedPsFailed() {
+
+    }
+
+    @Test
+    @DisplayName(value = "should create or reactivate Ps")
+    public void forceCreatePs() {
+
     }
 
 }

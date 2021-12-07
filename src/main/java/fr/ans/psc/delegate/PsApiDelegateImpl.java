@@ -73,8 +73,10 @@ public class PsApiDelegateImpl extends AbstractApiDelegate implements PsApiDeleg
         // set mongo _id to avoid error if it's an update
         Ps storedPs = psRepository.findByNationalId(ps.getNationalId());
         if (storedPs != null) {
-            log.trace("Ps {} already exists, will be updated", ps.getNationalId());
+            log.info("Ps {} already exists, will be updated", ps.getNationalId());
             ps.set_id(storedPs.get_id());
+        } else {
+            log.info("PS {} doesn't exist already, will be created", ps.getNationalId());
         }
 
         mongoTemplate.save(ps);
@@ -84,11 +86,11 @@ public class PsApiDelegateImpl extends AbstractApiDelegate implements PsApiDeleg
         long timestamp = ApiUtils.getInstantTimestamp();
 
         if (!psRefList.isEmpty()) {
-            psRefList.stream().filter(psRef -> psRef.getDeactivated() > psRef.getActivated())
+            psRefList.stream().filter(psRef -> (psRef.getDeactivated() != null && psRef.getDeactivated() > psRef.getActivated()))
                     .forEach(psRef -> {
                         psRef.setActivated(timestamp);
                         mongoTemplate.save(psRef);
-//                        log.trace("PsRef")
+                        log.info("PsRef {} has been reactivated", psRef.getNationalIdRef());
                     });
         } else {
             // psRef could exist already and point to another Ps
