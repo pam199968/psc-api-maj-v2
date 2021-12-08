@@ -11,17 +11,17 @@
       "birthCountryCode": "99000",
       "birthAddress": "METZ",
       "genderCode": "F",
-      "phone": "0682292033",
-      "email": "zazou57@hotmail.fr",
+      "phone": "0601020304",
+      "email": "toto57@hotmail.fr",
       "salutationCode": "MME",
       "professions": [
         {
           "exProId": "50C",
           "code": "50",
           "categoryCode": "C",
-          "salutationCode": "",
-          "lastName": "LEY",
-          "firstName": "CELINE",
+          "salutationCode": "M",
+          "lastName": "McNULTY",
+          "firstName": "JIMMY",
           "expertises": [
             {
               "expertiseId": "SSM69",
@@ -34,8 +34,8 @@
               "situId": "SSA04",
               "modeCode": "S",
               "activitySectorCode": "SA04",
-              "pharmacistTableSectionCode": "",
-              "roleCode": "",
+              "pharmacistTableSectionCode": "AC36",
+              "roleCode": "12",
               "structures": [
                 {
                   "structureId": "1"

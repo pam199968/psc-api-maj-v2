@@ -123,11 +123,14 @@ public class PsOperationTest {
     @DisplayName(value = "should create a brand new Ps")
     public void createNewPs() throws Exception {
         mockMvc.perform(post("/api/v1/ps").header("Accept", "application/json")
-                .contentType("application/json").content("{\n" +
-                        "\"idType\": \"8\",\n" +
-                        "\"id\": \"00000000001\",\n" +
-                        "\"nationalId\": \"800000000001\"\n" +
-                        "}"))
+                .contentType("application/json").content("{\"_id\":\"61b10a354be1c57efb1f8131\",\"idType\":\"8\",\"id\":\"00000000001\","+
+                        "\"nationalId\":\"800000000001\",\"lastName\":\"DOE\",\"firstName\":\"JOHN''\",\"dateOfBirth\":\"17/12/1983\","+
+                        "\"birthAddressCode\":\"57463\",\"birthCountryCode\":\"99000\",\"birthAddress\":\"METZ\",\"genderCode\":\"F\","+
+                        "\"phone\":\"0601020304\",\"email\":\"toto57@hotmail.fr\",\"salutationCode\":\"MME\",\"professions\":[{\"exProId\":\"50C\","+
+                        "\"code\":\"50\",\"categoryCode\":\"C\",\"salutationCode\":\"M\",\"lastName\":\"McNULTY\",\"firstName\":\"JIMMY\","+
+                        "\"expertises\":[{\"expertiseId\":\"SSM69\",\"typeCode\":\"S\",\"code\":\"SM69\"}],\"workSituations\":[{\"situId\":\"SSA04\","+
+                        "\"modeCode\":\"S\",\"activitySectorCode\":\"SA04\",\"pharmacistTableSectionCode\":\"AC36\",\"roleCode\":\"12\","+
+                        "\"structures\":[{\"structureId\":\"1\"}]}]}]}"))
                 .andExpect(status().is(201));
         assertThat(memoryAppender.contains("Ps 800000000001 successfully stored or updated", Level.INFO)).isTrue();
         assertThat(memoryAppender.contains("PsRef 800000000001 has been reactivated", Level.INFO)).isFalse();
