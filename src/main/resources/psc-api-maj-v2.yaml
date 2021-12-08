@@ -320,28 +320,32 @@ components:
       required:
         - structureTechnicalId
     WorkSituation:
-      description: ''
+      description: 'Situation d exercice'
       type: object
       properties:
         situId:
           type: string
-          minLength: 0
         modeCode:
           type: string
           minLength: 1
         activitySectorCode:
           type: string
-          minLength: 0
         pharmacistTableSectionCode:
           type: string
-          minLength: 0
         roleCode:
           type: string
-          minLength: 0
         structures:
           type: array
           items:
-            $ref: '#/components/schemas/Structure'
+            $ref: '#/components/schemas/StructureRef'
+    StructureRef:
+      description: 'Structure reference'
+      type: object
+      properties:
+        structureId:
+          type: string
+      required:
+        - structureId
     Profession:
       description: 'Profession'
       type: object

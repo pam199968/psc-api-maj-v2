@@ -107,31 +107,7 @@ public class PsOperationTest {
                 "              \"roleCode\": \"\",\n" +
                 "              \"structures\": [\n" +
                 "                {\n" +
-                "                  \"siteSIRET\": null,\n" +
-                "                  \"siteSIREN\": null,\n" +
-                "                  \"siteFINESS\": null,\n" +
-                "                  \"legalEstablishmentFINESS\": null,\n" +
-                "                  \"structureTechnicalId\": \"1\",\n" +
-                "                  \"legalCommercialName\": null,\n" +
-                "                  \"publicCommercialName\": null,\n" +
-                "                  \"recipientAdditionalInfo\": null,\n" +
-                "                  \"geoLocationAdditionalInfo\": null,\n" +
-                "                  \"streetNumber\": null,\n" +
-                "                  \"streetNumberRepetitionIndex\": null,\n" +
-                "                  \"streetCategoryCode\": null,\n" +
-                "                  \"streetLabel\": null,\n" +
-                "                  \"distributionMention\": null,\n" +
-                "                  \"cedexOffice\": null,\n" +
-                "                  \"postalCode\": null,\n" +
-                "                  \"communeCode\": null,\n" +
-                "                  \"countryCode\": null,\n" +
-                "                  \"phone\": null,\n" +
-                "                  \"phone2\": null,\n" +
-                "                  \"fax\": null,\n" +
-                "                  \"email\": null,\n" +
-                "                  \"departmentCode\": null,\n" +
-                "                  \"oldStructureId\": null,\n" +
-                "                  \"registrationAuthority\": null\n" +
+                "                  \"structureId\": \"1\"\n" +
                 "                }\n" +
                 "              ]\n" +
                 "            }\n" +
@@ -177,14 +153,17 @@ public class PsOperationTest {
     }
 
     @Test
-    @DisplayName(value = "should create a new Ps")
+    @DisplayName(value = "should create a brand new Ps")
+    @MongoDataSet(value = "/dataset/ps_2_psref_entries.json", cleanBefore = true, cleanAfter = true)
     public void createNewPs() {
 
     }
 
     @Test
-    @DisplayName(value = "should not create Ps if already exists")
-    public void createExistingPsFailed() {
+    @DisplayName(value = "should reactivate Ps if already exists")
+    @MongoDataSet(value = "/dataset/deactivated_ps.json", cleanBefore = true, cleanAfter = true)
+    public void reactivateExistingPs() {
+
     }
 
     @Test

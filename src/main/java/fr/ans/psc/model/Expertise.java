@@ -9,7 +9,6 @@ import io.swagger.annotations.ApiModelProperty;
  * Expertise
  */
 @ApiModel(description = "Expertise")
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2021-12-07T17:22:10.562370300+01:00[Europe/Paris]")
 public class Expertise   {
   @JsonProperty("expertiseId")
   private String expertiseId;

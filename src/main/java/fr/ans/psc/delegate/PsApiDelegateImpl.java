@@ -123,4 +123,18 @@ public class PsApiDelegateImpl extends AbstractApiDelegate implements PsApiDeleg
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+    @Override
+    public ResponseEntity<Void> forceDeletePsById(String psId) {
+        Ps ps = psRepository.findByNationalId(psId);
+
+        if (ps == null) {
+            log.warn("No Ps found with id {}, could not delete it", psId);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        mongoTemplate.remove(ps);
+        log.info("Ps {} successfully deleted", psId);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
 }
