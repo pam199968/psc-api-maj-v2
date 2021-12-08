@@ -2,6 +2,7 @@ package fr.ans.psc.model;
 
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.util.ArrayList;
 import java.util.List;
@@ -11,7 +12,7 @@ import javax.validation.constraints.*;
 /**
  * WorkSituation
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2021-12-07T17:22:10.562370300+01:00[Europe/Paris]")
+@ApiModel(description = "Situation d'exercice")
 public class WorkSituation   {
   @JsonProperty("situId")
   private String situId;
@@ -30,14 +31,13 @@ public class WorkSituation   {
 
   @JsonProperty("structures")
   @Valid
-  private List<Structure> structures = null;
+  private List<StructureRef> structures = null;
 
   /**
    * Get situId
    * @return situId
   */
   @ApiModelProperty(value = "")
-@Size(min = 0) 
   public String getSituId() {
     return situId;
   }
@@ -51,7 +51,6 @@ public class WorkSituation   {
    * @return modeCode
   */
   @ApiModelProperty(value = "")
-@Size(min = 1) 
   public String getModeCode() {
     return modeCode;
   }
@@ -65,7 +64,6 @@ public class WorkSituation   {
    * @return activitySectorCode
   */
   @ApiModelProperty(value = "")
-@Size(min = 0) 
   public String getActivitySectorCode() {
     return activitySectorCode;
   }
@@ -79,7 +77,6 @@ public class WorkSituation   {
    * @return pharmacistTableSectionCode
   */
   @ApiModelProperty(value = "")
-@Size(min = 0) 
   public String getPharmacistTableSectionCode() {
     return pharmacistTableSectionCode;
   }
@@ -93,7 +90,6 @@ public class WorkSituation   {
    * @return roleCode
   */
   @ApiModelProperty(value = "")
-@Size(min = 0) 
   public String getRoleCode() {
     return roleCode;
   }
@@ -108,11 +104,11 @@ public class WorkSituation   {
   */
   @ApiModelProperty(value = "")
   @Valid
-  public List<Structure> getStructures() {
+  public List<StructureRef> getStructures() {
     return structures;
   }
 
-  public void setStructures(List<Structure> structures) {
+  public void setStructures(List<StructureRef> structures) {
     this.structures = structures;
   }
 

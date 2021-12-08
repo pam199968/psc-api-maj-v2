@@ -38,31 +38,7 @@
               "roleCode": "",
               "structures": [
                 {
-                  "siteSIRET": null,
-                  "siteSIREN": null,
-                  "siteFINESS": null,
-                  "legalEstablishmentFINESS": null,
-                  "structureTechnicalId": "1",
-                  "legalCommercialName": null,
-                  "publicCommercialName": null,
-                  "recipientAdditionalInfo": null,
-                  "geoLocationAdditionalInfo": null,
-                  "streetNumber": null,
-                  "streetNumberRepetitionIndex": null,
-                  "streetCategoryCode": null,
-                  "streetLabel": null,
-                  "distributionMention": null,
-                  "cedexOffice": null,
-                  "postalCode": null,
-                  "communeCode": null,
-                  "countryCode": null,
-                  "phone": null,
-                  "phone2": null,
-                  "fax": null,
-                  "email": null,
-                  "departmentCode": null,
-                  "oldStructureId": null,
-                  "registrationAuthority": null
+                  "structureId": "1"
                 }
               ]
             }
