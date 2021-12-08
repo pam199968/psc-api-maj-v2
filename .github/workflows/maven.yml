@@ -28,8 +28,12 @@ jobs:
     - name: Publish Test Report
       if: ${{ always() }}
       uses: scacap/action-surefire-report@v1
-    - name: Run codacy-coverage-reporter
-      uses: codacy/codacy-coverage-reporter-action@v1
+    - name: Run codecov reporter
+      uses: codecov/codecov-action@v2
       with:
-        project-token: ${{ secrets.CODACY_PROJECT_TOKEN }}
-        coverage-reports: target/site/jacoco/jacoco.xml
+        token: ${{ secrets.CODECOV_TOKEN }} # not required for public repos
+        files: ./target/site/jacoco/jacoco.xml
+        flags: unittests # optional
+        name: codecov-umbrella # optional
+        fail_ci_if_error: false
+        verbose: true
