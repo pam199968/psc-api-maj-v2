@@ -97,27 +97,34 @@ public class PsApiDelegateImpl extends AbstractApiDelegate implements PsApiDeleg
 
     @Override
     public ResponseEntity<Void> updatePs(Ps ps) {
-        // check that the Ps exist AND that the psRef is activated
-        List<PsRef> psRefList = psRefRepository.findAllByNationalId(ps.getNationalId());
-
-        Ps storedPs = psRepository.findByNationalId(ps.getNationalId());
-        if (storedPs == null) {
+        // check if PsRef is activated before trying to update it
+        PsRef storedPsRef = psRefRepository.findPsRefByNationalIdRef(ps.getNationalId());
+        if (!ApiUtils.isPsRefActivated(storedPsRef)) {
+            log.warn("No Ps found with nationalId {}, can not update it", ps.getNationalId());
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
-        ps.set_id(storedPs.get_id());
+        // set technical id then update
+        Ps storedPs = psRepository.findByNationalId(ps.getNationalId());
+        if (storedPs != null) {
+            ps.set_id(storedPs.get_id());
+        }
         mongoTemplate.save(ps);
+        log.info("Ps {} successfully updated", ps.getNationalId());
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @Override
     public ResponseEntity<Void> deletePsById(String psId) {
-        // get all PsRefs that point to this ps
-        List<PsRef> psRefList = psRefRepository.findAllByNationalId(psId);
-        if (psRefList.isEmpty()) {
+        PsRef storedPsRef = psRefRepository.findPsRefByNationalIdRef(psId);
+        if (storedPsRef == null) {
+            log.warn("No Ps found with nationalId {}, will not be deleted", psId);
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
+
+        // get all PsRefs that point to this ps
+        List<PsRef> psRefList = psRefRepository.findAllByNationalId(storedPsRef.getNationalId());
 
         // deactivate each PsRef pointing to this ps
         long timestamp = ApiUtils.getInstantTimestamp();
@@ -125,9 +132,10 @@ public class PsApiDelegateImpl extends AbstractApiDelegate implements PsApiDeleg
         psRefList.forEach(psRef -> {
             psRef.setDeactivated(timestamp);
             mongoTemplate.save(psRef);
+            log.info("Ps {} successfully deleted", psRef.getNationalIdRef());
         });
 
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @Override

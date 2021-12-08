@@ -1,7 +1,6 @@
 package fr.ans.psc.pscapimajv2.api.ps;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -11,12 +10,16 @@ import static org.assertj.core.api.Assertions.*;
 import ch.qos.logback.classic.LoggerContext;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
+import com.jupiter.tools.spring.test.mongo.annotation.ExpectedMongoDataSet;
 import com.jupiter.tools.spring.test.mongo.annotation.MongoDataSet;
 import com.jupiter.tools.spring.test.mongo.junit5.MongoDbExtension;
 import fr.ans.psc.PscApiMajApplication;
 import fr.ans.psc.delegate.PsApiDelegateImpl;
 import fr.ans.psc.model.Ps;
+import fr.ans.psc.model.PsRef;
+import fr.ans.psc.repository.PsRefRepository;
 import fr.ans.psc.repository.PsRepository;
+import fr.ans.psc.utils.ApiUtils;
 import fr.ans.psc.utils.MemoryAppender;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -40,6 +43,8 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
+import java.util.List;
+
 @ExtendWith({RestDocumentationExtension.class, SpringExtension.class, MongoDbExtension.class}) // pour restdocs
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -53,6 +58,8 @@ public class PsOperationTest {
     private MockMvc mockMvc;
     @Autowired
     private PsRepository psRepository;
+    @Autowired
+    private PsRefRepository psRefRepository;
     @Autowired
     private MongoTemplate mongoTemplateTest;
     @Autowired
@@ -170,31 +177,102 @@ public class PsOperationTest {
 
     @Test
     @DisplayName(value = "should delete Ps by Id")
-    public void deletePsById() {
+    @MongoDataSet(value = "/dataset/ps_2_psref_entries.json", cleanBefore = true, cleanAfter = true)
+    public void deletePsById() throws Exception {
+        mockMvc.perform(delete("/api/v1/ps/800000000001")
+                .header("Accept", "application/json"))
+                .andExpect(status().is(204));
 
+        assertThat(memoryAppender.contains("No Ps found with nationalId 800000000001, will not be deleted", Level.WARN)).isFalse();
+        assertThat(memoryAppender.contains("Ps 800000000001 successfully deleted", Level.INFO)).isTrue();
+        assertThat(memoryAppender.contains("Ps 800000000011 successfully deleted", Level.INFO)).isTrue();
+
+        PsRef psRef1 = psRefRepository.findPsRefByNationalIdRef("800000000001");
+        PsRef psRef2 = psRefRepository.findPsRefByNationalIdRef("800000000011");
+
+        assertThat(ApiUtils.isPsRefActivated(psRef1)).isFalse();
+        assertThat(ApiUtils.isPsRefActivated(psRef2)).isFalse();
     }
 
     @Test
     @DisplayName(value = "should not delete Ps if not exists")
-    public void deletePsFailed() {
+    @MongoDataSet(value = "/dataset/ps_2_psref_entries.json", cleanBefore = true, cleanAfter = true)
+    @ExpectedMongoDataSet(value = "/dataset/ps_2_psref_entries.json")
+    public void deletePsFailed() throws Exception {
+        mockMvc.perform(delete("/api/v1/ps/800000000003")
+                .header("Accept", "application/json"))
+                .andExpect(status().is(404));
 
+        assertThat(memoryAppender.contains("No Ps found with nationalId 800000000003, will not be deleted", Level.WARN)).isTrue();
+        assertThat(memoryAppender.contains("Ps 800000000003 successfully deleted", Level.INFO)).isFalse();
     }
 
     @Test
     @DisplayName(value = "should update Ps")
-    public void updatePsById() {
+    @MongoDataSet(value = "/dataset/ps_2_psref_entries.json", cleanBefore = true, cleanAfter = true)
+    public void updatePsById() throws Exception {
+        mockMvc.perform(put("/api/v1/ps").header("Accept", "application/json")
+                .contentType("application/json").content("{\n" +
+                        "\"idType\": \"8\",\n" +
+                        "\"id\": \"00000000001\",\n" +
+                        "\"nationalId\": \"800000000001\"\n" +
+                        "}"))
+                .andExpect(status().is(200));
 
+        assertThat(memoryAppender.contains("No Ps found with nationalId 800000000001, can not update it", Level.WARN)).isFalse();
+        assertThat(memoryAppender.contains("Ps 800000000001 successfully updated", Level.INFO)).isTrue();
     }
 
     @Test
     @DisplayName(value = "should not update Ps if not exists")
-    public void updateAbsentPsFailed() {
+    public void updateAbsentPsFailed() throws Exception {
+        mockMvc.perform(put("/api/v1/ps").header("Accept", "application/json")
+                .contentType("application/json").content("{\n" +
+                "\"idType\": \"8\",\n" +
+                "\"id\": \"00000000001\",\n" +
+                "\"nationalId\": \"800000000001\"\n" +
+                "}"))
+                .andExpect(status().is(404));
 
+        assertThat(memoryAppender.contains("No Ps found with nationalId 800000000001, can not update it", Level.WARN)).isTrue();
+        assertThat(memoryAppender.contains("Ps 800000000001 successfully updated", Level.INFO)).isFalse();
+    }
+
+    @Test
+    @DisplayName(value = "should not update Ps if deactivated")
+    @MongoDataSet(value = "/dataset/deactivated_ps.json", cleanBefore = true, cleanAfter = true)
+    public void updateDeactivatedPsFailed() throws Exception {
+        mockMvc.perform(put("/api/v1/ps").header("Accept", "application/json")
+                .contentType("application/json").content("{\n" +
+                        "\"idType\": \"8\",\n" +
+                        "\"id\": \"00000000002\",\n" +
+                        "\"nationalId\": \"800000000002\"\n" +
+                        "}"))
+                .andExpect(status().is(404));
+
+        assertThat(memoryAppender.contains("No Ps found with nationalId 800000000002, can not update it", Level.WARN)).isTrue();
+        assertThat(memoryAppender.contains("Ps 800000000002 successfully updated", Level.INFO)).isFalse();
     }
 
     @Test
     @DisplayName(value = "should not update Ps if malformed request body")
-    public void updateMalformedPsFailed() {
+    @MongoDataSet(value = "/dataset/ps_2_psref_entries.json", cleanBefore = true, cleanAfter = true)
+    public void updateMalformedPsFailed() throws Exception {
+        // Id not present
+        mockMvc.perform(put("/api/v1/ps").header("Accept", "application/json")
+                .contentType("application/json").content("{\n" +
+                        "\"idType\": \"8\",\n" +
+                        "\"id\": \"00000000001\",\n" +
+                        "}"))
+                .andExpect(status().is(400));
 
+        // Id is blank
+        mockMvc.perform(put("/api/v1/ps").header("Accept", "application/json")
+                .contentType("application/json").content("{\n" +
+                        "\"idType\": \"8\",\n" +
+                        "\"id\": \"00000000001\",\n" +
+                        "\"nationalId\": \"\"\n" +
+                        "}"))
+                .andExpect(status().is(400));
     }
 }
