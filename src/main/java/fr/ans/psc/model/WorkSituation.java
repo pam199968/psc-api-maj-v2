@@ -38,7 +38,6 @@ public class WorkSituation   {
    * @return situId
   */
   @ApiModelProperty(value = "")
-@Size(min = 0) 
   public String getSituId() {
     return situId;
   }
@@ -52,7 +51,6 @@ public class WorkSituation   {
    * @return modeCode
   */
   @ApiModelProperty(value = "")
-@Size(min = 1) 
   public String getModeCode() {
     return modeCode;
   }
@@ -66,7 +64,6 @@ public class WorkSituation   {
    * @return activitySectorCode
   */
   @ApiModelProperty(value = "")
-@Size(min = 0) 
   public String getActivitySectorCode() {
     return activitySectorCode;
   }
@@ -80,7 +77,6 @@ public class WorkSituation   {
    * @return pharmacistTableSectionCode
   */
   @ApiModelProperty(value = "")
-@Size(min = 0) 
   public String getPharmacistTableSectionCode() {
     return pharmacistTableSectionCode;
   }
@@ -94,7 +90,6 @@ public class WorkSituation   {
    * @return roleCode
   */
   @ApiModelProperty(value = "")
-@Size(min = 0) 
   public String getRoleCode() {
     return roleCode;
   }
