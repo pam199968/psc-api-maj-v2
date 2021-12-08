@@ -34,8 +34,7 @@ public class PsApiDelegateImpl extends AbstractApiDelegate implements PsApiDeleg
         PsRef psRef = psRefRepository.findPsRefByNationalIdRef(psId);
 
         // check if PsRef exists and is activated
-        if (psRef == null ||
-                ( psRef.getDeactivated() != null && psRef.getDeactivated() > psRef.getActivated())) {
+        if (!ApiUtils.isPsRefActivated(psRef)) {
             String operationLog = psRef == null ? "No Ps found with nationalIdRef {}" : "Ps {} is deactivated";
             log.warn(operationLog, psId);
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -49,44 +48,51 @@ public class PsApiDelegateImpl extends AbstractApiDelegate implements PsApiDeleg
 
     @Override
     public ResponseEntity<Void> createNewPs(Ps ps) {
-        // set mongo _id to avoid error if it's an update
-        Ps storedPs = psRepository.findByNationalId(ps.getNationalId());
-        if (storedPs != null) {
-            log.info("Ps {} already exists, will be updated", ps.getNationalId());
-            ps.set_id(storedPs.get_id());
-        } else {
-            log.info("PS {} doesn't exist already, will be created", ps.getNationalId());
-        }
-
-        mongoTemplate.save(ps);
-        log.info("Ps {} succesfully stored or updated", ps.getNationalId());
-
-        List<PsRef> psRefList = psRefRepository.findAllByNationalId(ps.getNationalId());
         long timestamp = ApiUtils.getInstantTimestamp();
+        PsRef storedPsRef = psRefRepository.findPsRefByNationalIdRef(ps.getNationalId());
 
-        if (!psRefList.isEmpty()) {
-            psRefList.stream().filter(psRef -> (psRef.getDeactivated() != null && psRef.getDeactivated() > psRef.getActivated()))
-                    .forEach(psRef -> {
-                        psRef.setActivated(timestamp);
-                        mongoTemplate.save(psRef);
-                        log.info("PsRef {} has been reactivated", psRef.getNationalIdRef());
-                    });
-        } else {
-            // psRef could exist already and point to another Ps
-            // (this shouldn't occur functionnally but could programmatically)
-            // in this case we update the pointer
-            // otherwise we just create it
-            PsRef psRef = psRefRepository.findPsRefByNationalIdRef(ps.getNationalId());
-            if (psRef != null) {
-                psRef.setNationalId(ps.getNationalId());
-            } else {
-                psRef = new PsRef(ps.getNationalId(), ps.getNationalId(), timestamp);
-            }
-
-            mongoTemplate.save(psRef);
+        // DON'T UPDATE IF ALREADY ACTIVATED
+        if (ApiUtils.isPsRefActivated(storedPsRef)) {
+            log.warn("Ps {} already exists and is activated, will not be updated", ps.getNationalId());
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
         }
 
-        return new ResponseEntity<>(HttpStatus.OK);
+        // PSREF EXIST, UPDATE AND REACTIVATION
+        if (storedPsRef != null) {
+            Ps storedPs = psRepository.findByNationalId(storedPsRef.getNationalId());
+            if (storedPs != null) {
+                // set mongo _id to avoid error if it's an update
+                // Then update Ps data
+                log.info("Ps {} already exists, will be updated", ps.getNationalId());
+                ps.set_id(storedPs.get_id());
+                mongoTemplate.save(ps);
+                log.info("Ps {} successfully stored or updated", ps.getNationalId());
+
+                // REACTIVATE ALL PSREF THAT POINTED TOWARDS UPDATED PS
+                // It's programmatically possible that the updated Ps has a modified nationalId (and still the same mongo _id)
+                // So we reset every PsRef pointer with the nationalId of the updated Ps no matter that it has actually changed or not
+                List<PsRef> psRefList = psRefRepository.findAllByNationalId(storedPs.getNationalId());
+                log.info("psRefList size {}", psRefList.size());
+                psRefList.stream().filter(psRef -> !ApiUtils.isPsRefActivated(psRef)).forEach(psRef -> {
+                    psRef.setActivated(timestamp);
+                    psRef.setNationalId(ps.getNationalId());
+                    mongoTemplate.save(psRef);
+                    log.info("PsRef {} has been reactivated", psRef.getNationalIdRef());
+                });
+
+            }
+        }
+        // PREF DOES NOT EXIST, PHYSICAL CREATION
+        else {
+            log.info("PS {} doesn't exist already, will be created", ps.getNationalId());
+            mongoTemplate.save(ps);
+            log.info("Ps {} successfully stored or updated", ps.getNationalId());
+
+            storedPsRef = new PsRef(ps.getNationalId(), ps.getNationalId(), timestamp);
+            mongoTemplate.save(storedPsRef);
+        }
+
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @Override

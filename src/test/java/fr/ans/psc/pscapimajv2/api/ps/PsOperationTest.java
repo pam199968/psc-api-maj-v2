@@ -9,10 +9,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.assertj.core.api.Assertions.*;
 
 import ch.qos.logback.classic.LoggerContext;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
 import com.jupiter.tools.spring.test.mongo.annotation.MongoDataSet;
 import com.jupiter.tools.spring.test.mongo.junit5.MongoDbExtension;
 import fr.ans.psc.PscApiMajApplication;
 import fr.ans.psc.delegate.PsApiDelegateImpl;
+import fr.ans.psc.model.Ps;
+import fr.ans.psc.repository.PsRepository;
 import fr.ans.psc.utils.MemoryAppender;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -48,11 +52,14 @@ public class PsOperationTest {
     @Autowired
     private MockMvc mockMvc;
     @Autowired
+    private PsRepository psRepository;
+    @Autowired
     private MongoTemplate mongoTemplateTest;
     @Autowired
     private MongoDatabaseFactory mongoDatabaseFactory;
 
     private MemoryAppender memoryAppender;
+    private final ObjectWriter objectWriter = new ObjectMapper().writer().withDefaultPrettyPrinter();
 
     @BeforeEach
     public void setUp() {
@@ -69,65 +76,21 @@ public class PsOperationTest {
     @MongoDataSet(value = "/dataset/ps_2_psref_entries.json", cleanBefore = true, cleanAfter = true)
     public void getPsById() throws Exception {
 
-        String body = "{\n" +
-                "      \"idType\": \"8\",\n" +
-                "      \"id\": \"00000000001\",\n" +
-                "      \"nationalId\": \"800000000001\",\n" +
-                "      \"lastName\": \"DOE\",\n" +
-                "      \"firstName\": \"JOHN''\",\n" +
-                "      \"dateOfBirth\": \"17/12/1983\",\n" +
-                "      \"birthAddressCode\": \"57463\",\n" +
-                "      \"birthCountryCode\": \"99000\",\n" +
-                "      \"birthAddress\": \"METZ\",\n" +
-                "      \"genderCode\": \"F\",\n" +
-                "      \"phone\": \"0682292033\",\n" +
-                "      \"email\": \"zazou57@hotmail.fr\",\n" +
-                "      \"salutationCode\": \"MME\",\n" +
-                "      \"professions\": [\n" +
-                "        {\n" +
-                "          \"exProId\": \"50C\",\n" +
-                "          \"code\": \"50\",\n" +
-                "          \"categoryCode\": \"C\",\n" +
-                "          \"salutationCode\": \"\",\n" +
-                "          \"lastName\": \"LEY\",\n" +
-                "          \"firstName\": \"CELINE\",\n" +
-                "          \"expertises\": [\n" +
-                "            {\n" +
-                "              \"expertiseId\": \"SSM69\",\n" +
-                "              \"typeCode\": \"S\",\n" +
-                "              \"code\": \"SM69\"\n" +
-                "            }\n" +
-                "          ],\n" +
-                "          \"workSituations\": [\n" +
-                "            {\n" +
-                "              \"situId\": \"SSA04\",\n" +
-                "              \"modeCode\": \"S\",\n" +
-                "              \"activitySectorCode\": \"SA04\",\n" +
-                "              \"pharmacistTableSectionCode\": \"\",\n" +
-                "              \"roleCode\": \"\",\n" +
-                "              \"structures\": [\n" +
-                "                {\n" +
-                "                  \"structureId\": \"1\"\n" +
-                "                }\n" +
-                "              ]\n" +
-                "            }\n" +
-                "          ]\n" +
-                "        }\n" +
-                "      ]\n" +
-                "    }";
+        Ps storedPs = psRepository.findByNationalId("800000000001");
+        String psAsJsonString = objectWriter.writeValueAsString(storedPs);
 
-        ResultActions returned = mockMvc.perform(get("/api/v1/ps/800000000001")
+        ResultActions firstPsRefRequest = mockMvc.perform(get("/api/v1/ps/800000000001")
                 .header("Accept", "application/json"))
                 .andExpect(status().is2xxSuccessful());
 
-        returned.andExpect(content().json(body));
+        firstPsRefRequest.andExpect(content().json(psAsJsonString));
         assertThat(memoryAppender.contains("Ps 800000000001 has been found", Level.INFO)).isTrue();
 
-        ResultActions returned2 = mockMvc.perform(get("/api/v1/ps/800000000011")
+        ResultActions secondPsRefRequest = mockMvc.perform(get("/api/v1/ps/800000000011")
                 .header("Accept", "application/json"))
                 .andExpect(status().is2xxSuccessful());
 
-        returned.andExpect(content().json(body));
+        secondPsRefRequest.andExpect(content().json(psAsJsonString));
         assertThat(memoryAppender.contains("Ps 800000000001 has been found", Level.INFO)).isTrue();
 
     }
@@ -154,16 +117,46 @@ public class PsOperationTest {
 
     @Test
     @DisplayName(value = "should create a brand new Ps")
-    @MongoDataSet(value = "/dataset/ps_2_psref_entries.json", cleanBefore = true, cleanAfter = true)
-    public void createNewPs() {
+    public void createNewPs() throws Exception {
+        mockMvc.perform(post("/api/v1/ps").header("Accept", "application/json")
+                .contentType("application/json").content("{\n" +
+                        "\"idType\": \"8\",\n" +
+                        "\"id\": \"00000000001\",\n" +
+                        "\"nationalId\": \"800000000001\"\n" +
+                        "}"))
+                .andExpect(status().is(201));
+        assertThat(memoryAppender.contains("Ps 800000000001 successfully stored or updated", Level.INFO)).isTrue();
+        assertThat(memoryAppender.contains("PsRef 800000000001 has been reactivated", Level.INFO)).isFalse();
+    }
 
+    @Test
+    @DisplayName(value = "should not create a Ps if already exists and still activated")
+    @MongoDataSet(value = "/dataset/ps_2_psref_entries.json", cleanBefore = true, cleanAfter = true)
+    public void createStillActivatedPsFailed() throws Exception {
+        mockMvc.perform(post("/api/v1/ps").header("Accept", "application/json")
+        .contentType("application/json").content("{\n" +
+                        "\"idType\": \"8\",\n" +
+                        "\"id\": \"00000000001\",\n" +
+                        "\"nationalId\": \"800000000001\"\n" +
+                        "}"))
+                .andExpect(status().is(409));
+        assertThat(memoryAppender.contains("Ps 800000000001 already exists and is activated, will not be updated", Level.WARN)).isTrue();
+        assertThat(memoryAppender.contains("Ps 800000000001 successfully stored or updated", Level.INFO)).isFalse();
     }
 
     @Test
     @DisplayName(value = "should reactivate Ps if already exists")
     @MongoDataSet(value = "/dataset/deactivated_ps.json", cleanBefore = true, cleanAfter = true)
-    public void reactivateExistingPs() {
-
+    public void reactivateExistingPs() throws Exception {
+        mockMvc.perform(post("/api/v1/ps").header("Accept", "application/json")
+                .contentType("application/json").content("{\n" +
+                        "\"idType\": \"8\",\n" +
+                        "\"id\": \"00000000002\",\n" +
+                        "\"nationalId\": \"800000000002\"\n" +
+                        "}"))
+                .andExpect(status().is(201));
+        assertThat(memoryAppender.contains("Ps 800000000002 successfully stored or updated", Level.INFO)).isTrue();
+        assertThat(memoryAppender.contains("PsRef 800000000002 has been reactivated", Level.INFO)).isTrue();
     }
 
     @Test
@@ -171,7 +164,7 @@ public class PsOperationTest {
     public void createMalformedPsFailed() throws Exception {
         mockMvc.perform(post("/api/v1/ps").header("Accept", "application/json")
                 .contentType("application/json").content("{\"toto\":\"titi\"}"))
-                .andExpect(status().is(400)).andDo(print());
+                .andExpect(status().is(400));
     }
 
 
@@ -204,11 +197,4 @@ public class PsOperationTest {
     public void updateMalformedPsFailed() {
 
     }
-
-    @Test
-    @DisplayName(value = "should create or reactivate Ps")
-    public void forceCreatePs() {
-
-    }
-
 }

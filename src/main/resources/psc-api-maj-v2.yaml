@@ -40,6 +40,7 @@ paths:
             schema:
               $ref: '#/components/schemas/Ps'
         description: The Ps to be created
+        required: true
     put:
       summary: 'Update Ps'
       operationId: update-ps
@@ -60,6 +61,7 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/Ps'
+        required: true
       tags:
         - ps
   '/ps/{psId}':
@@ -158,6 +160,7 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/Structure'
+        required: true
     put:
       summary: 'Update structure'
       tags:
@@ -180,6 +183,7 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/Structure'
+        required: true
   '/structure/{structureId}':
     parameters:
       - schema:
@@ -248,6 +252,7 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/PsRef'
+        required: true
       tags:
         - toggle
 components:
