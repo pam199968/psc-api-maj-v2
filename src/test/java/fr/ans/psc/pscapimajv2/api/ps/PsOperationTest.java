@@ -61,10 +61,6 @@ public class PsOperationTest {
     private PsRepository psRepository;
     @Autowired
     private PsRefRepository psRefRepository;
-    @Autowired
-    private MongoTemplate mongoTemplateTest;
-    @Autowired
-    private MongoDatabaseFactory mongoDatabaseFactory;
 
     private MemoryAppender memoryAppender;
     private final ObjectWriter objectWriter = new ObjectMapper().writer().withDefaultPrettyPrinter();
@@ -89,14 +85,14 @@ public class PsOperationTest {
 
         ResultActions firstPsRefRequest = mockMvc.perform(get("/api/v1/ps/800000000001")
                 .header("Accept", "application/json"))
-                .andExpect(status().is2xxSuccessful());
+                .andExpect(status().is(200));
 
         firstPsRefRequest.andExpect(content().json(psAsJsonString));
         assertThat(memoryAppender.contains("Ps 800000000001 has been found", Level.INFO)).isTrue();
 
         ResultActions secondPsRefRequest = mockMvc.perform(get("/api/v1/ps/800000000011")
                 .header("Accept", "application/json"))
-                .andExpect(status().is2xxSuccessful());
+                .andExpect(status().is(200));
 
         secondPsRefRequest.andExpect(content().json(psAsJsonString));
         assertThat(memoryAppender.contains("Ps 800000000001 has been found", Level.INFO)).isTrue();

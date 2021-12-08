@@ -123,6 +123,18 @@ public class PsRef   {
         Objects.equals(this.deactivated, psRef.deactivated);
   }
 
+  public boolean rawEquals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    PsRef psRef = (PsRef) o;
+    return Objects.equals(this.nationalIdRef, psRef.nationalIdRef) &&
+            Objects.equals(this.nationalId, psRef.nationalId);
+  }
+
   @Override
   public int hashCode() {
     return Objects.hash(nationalIdRef, nationalId, activated, deactivated);

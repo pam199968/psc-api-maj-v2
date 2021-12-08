@@ -45,7 +45,7 @@ public class StructureApiDelegateImpl extends AbstractApiDelegate implements Str
 
         mongoTemplate.save(structure);
         log.info("New structure created with structure technical id {}", structure.getStructureTechnicalId());
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @Override
@@ -59,7 +59,7 @@ public class StructureApiDelegateImpl extends AbstractApiDelegate implements Str
 
         mongoTemplate.remove(storedStructure);
         log.info("Structure {} successfully removed", structureId);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @Override
