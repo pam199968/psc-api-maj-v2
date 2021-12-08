@@ -1,5 +1,6 @@
 package fr.ans.psc.pscapimajv2.api.ps;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -274,5 +275,35 @@ public class PsOperationTest {
                         "\"nationalId\": \"\"\n" +
                         "}"))
                 .andExpect(status().is(400));
+    }
+
+    @Test
+    @DisplayName(value = "should physically delete Ps")
+    @MongoDataSet(value = "/dataset/3_ps_before_delete.json", cleanBefore = true, cleanAfter = true)
+    @ExpectedMongoDataSet(value = "/dataset/1_ps_after_delete.json")
+    public void physicalDeleteById() throws Exception {
+        mockMvc.perform(delete("/api/v1/ps/force/800000000001")
+                .header("Accept", "application/json"))
+                .andExpect(status().is(204));
+
+        assertThat(memoryAppender.contains("No Ps found with id 800000000001, could not delete it", Level.WARN)).isFalse();
+        assertThat(memoryAppender.contains("Ps 800000000001 successfully deleted", Level.INFO)).isTrue();
+        assertThat(memoryAppender.contains("PsRef 800000000001 pointing on Ps 800000000001 successfully removed", Level.INFO)).isTrue();
+        assertThat(memoryAppender.contains("PsRef 800000000011 pointing on Ps 800000000001 successfully removed", Level.INFO)).isTrue();
+        assertThat(memoryAppender.contains("Ps 800000000002 successfully deleted", Level.INFO)).isFalse();
+
+        assertEquals(psRefRepository.count(), 2);
+        assertEquals(psRepository.count(), 2);
+
+        // physical delete of deactivated Ps
+        mockMvc.perform(delete("/api/v1/ps/force/800000000002")
+                .header("Accept", "application/json"))
+                .andExpect(status().is(204));
+
+        assertThat(memoryAppender.contains("Ps 800000000002 successfully deleted", Level.INFO)).isTrue();
+        assertThat(memoryAppender.contains("PsRef 800000000002 pointing on Ps 800000000002 successfully removed", Level.INFO)).isTrue();
+
+        assertEquals(psRefRepository.count(), 1);
+        assertEquals(psRepository.count(), 1);
     }
 }

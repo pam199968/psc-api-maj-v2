@@ -149,6 +149,12 @@ public class PsApiDelegateImpl extends AbstractApiDelegate implements PsApiDeleg
 
         mongoTemplate.remove(ps);
         log.info("Ps {} successfully deleted", psId);
+
+        List<PsRef> psRefList = psRefRepository.findAllByNationalId(psId);
+        psRefList.forEach(psRef -> {
+            mongoTemplate.remove(psRef);
+            log.info("PsRef {} pointing on Ps {} successfully removed", psRef.getNationalIdRef(), psId);
+        });
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

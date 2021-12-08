@@ -1,0 +1,18 @@
+{
+  "fr.ans.psc.model.Ps": [
+    {
+      "idType": "8",
+      "id": "00000000003",
+      "nationalId": "800000000003",
+      "lastName": "VOLFONI",
+      "firstName": "RAOUL''"
+    }
+  ],
+  "fr.ans.psc.model.PsRef": [
+    {
+      "nationalIdRef": "800000000003",
+      "nationalId": "800000000003",
+      "activated": 1638791221
+    }
+  ]
+}
