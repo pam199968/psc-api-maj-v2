@@ -1,0 +1,48 @@
+{
+  "fr.ans.psc.model.Ps": [
+    {
+      "idType": "8",
+      "id": "00000000001",
+      "nationalId": "800000000001",
+      "lastName": "DUNCAN",
+      "firstName": "TIM''"
+    },
+    {
+      "idType": "8",
+      "id": "00000000002",
+      "nationalId": "800000000002",
+      "lastName": "DOE",
+      "firstName": "JANE''"
+    },
+    {
+      "idType": "8",
+      "id": "00000000003",
+      "nationalId": "800000000003",
+      "lastName": "VOLFONI",
+      "firstName": "RAOUL''"
+    }
+  ],
+  "fr.ans.psc.model.PsRef": [
+    {
+      "nationalIdRef": "800000000001",
+      "nationalId": "800000000001",
+      "activated": 1638791221
+    },
+    {
+      "nationalIdRef": "800000000011",
+      "nationalId": "800000000001",
+      "activated": 1638791221
+    },
+    {
+      "nationalIdRef": "800000000002",
+      "nationalId": "800000000002",
+      "activated": 1638791221,
+      "deactivated": 1638791501
+    },
+    {
+      "nationalIdRef": "800000000003",
+      "nationalId": "800000000003",
+      "activated": 1638791221
+    }
+  ]
+}

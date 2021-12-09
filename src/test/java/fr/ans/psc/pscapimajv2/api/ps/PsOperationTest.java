@@ -1,5 +1,6 @@
 package fr.ans.psc.pscapimajv2.api.ps;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -60,10 +61,6 @@ public class PsOperationTest {
     private PsRepository psRepository;
     @Autowired
     private PsRefRepository psRefRepository;
-    @Autowired
-    private MongoTemplate mongoTemplateTest;
-    @Autowired
-    private MongoDatabaseFactory mongoDatabaseFactory;
 
     private MemoryAppender memoryAppender;
     private final ObjectWriter objectWriter = new ObjectMapper().writer().withDefaultPrettyPrinter();
@@ -88,14 +85,14 @@ public class PsOperationTest {
 
         ResultActions firstPsRefRequest = mockMvc.perform(get("/api/v1/ps/800000000001")
                 .header("Accept", "application/json"))
-                .andExpect(status().is2xxSuccessful());
+                .andExpect(status().is(200));
 
         firstPsRefRequest.andExpect(content().json(psAsJsonString));
         assertThat(memoryAppender.contains("Ps 800000000001 has been found", Level.INFO)).isTrue();
 
         ResultActions secondPsRefRequest = mockMvc.perform(get("/api/v1/ps/800000000011")
                 .header("Accept", "application/json"))
-                .andExpect(status().is2xxSuccessful());
+                .andExpect(status().is(200));
 
         secondPsRefRequest.andExpect(content().json(psAsJsonString));
         assertThat(memoryAppender.contains("Ps 800000000001 has been found", Level.INFO)).isTrue();
@@ -126,11 +123,14 @@ public class PsOperationTest {
     @DisplayName(value = "should create a brand new Ps")
     public void createNewPs() throws Exception {
         mockMvc.perform(post("/api/v1/ps").header("Accept", "application/json")
-                .contentType("application/json").content("{\n" +
-                        "\"idType\": \"8\",\n" +
-                        "\"id\": \"00000000001\",\n" +
-                        "\"nationalId\": \"800000000001\"\n" +
-                        "}"))
+                .contentType("application/json").content("{\"_id\":\"61b10a354be1c57efb1f8131\",\"idType\":\"8\",\"id\":\"00000000001\","+
+                        "\"nationalId\":\"800000000001\",\"lastName\":\"DOE\",\"firstName\":\"JOHN''\",\"dateOfBirth\":\"17/12/1983\","+
+                        "\"birthAddressCode\":\"57463\",\"birthCountryCode\":\"99000\",\"birthAddress\":\"METZ\",\"genderCode\":\"F\","+
+                        "\"phone\":\"0601020304\",\"email\":\"toto57@hotmail.fr\",\"salutationCode\":\"MME\",\"professions\":[{\"exProId\":\"50C\","+
+                        "\"code\":\"50\",\"categoryCode\":\"C\",\"salutationCode\":\"M\",\"lastName\":\"McNULTY\",\"firstName\":\"JIMMY\","+
+                        "\"expertises\":[{\"expertiseId\":\"SSM69\",\"typeCode\":\"S\",\"code\":\"SM69\"}],\"workSituations\":[{\"situId\":\"SSA04\","+
+                        "\"modeCode\":\"S\",\"activitySectorCode\":\"SA04\",\"pharmacistTableSectionCode\":\"AC36\",\"roleCode\":\"12\","+
+                        "\"structures\":[{\"structureId\":\"1\"}]}]}]}"))
                 .andExpect(status().is(201));
         assertThat(memoryAppender.contains("Ps 800000000001 successfully stored or updated", Level.INFO)).isTrue();
         assertThat(memoryAppender.contains("PsRef 800000000001 has been reactivated", Level.INFO)).isFalse();
@@ -274,5 +274,35 @@ public class PsOperationTest {
                         "\"nationalId\": \"\"\n" +
                         "}"))
                 .andExpect(status().is(400));
+    }
+
+    @Test
+    @DisplayName(value = "should physically delete Ps")
+    @MongoDataSet(value = "/dataset/3_ps_before_delete.json", cleanBefore = true, cleanAfter = true)
+    @ExpectedMongoDataSet(value = "/dataset/1_ps_after_delete.json")
+    public void physicalDeleteById() throws Exception {
+        mockMvc.perform(delete("/api/v1/ps/force/800000000001")
+                .header("Accept", "application/json"))
+                .andExpect(status().is(204));
+
+        assertThat(memoryAppender.contains("No Ps found with id 800000000001, could not delete it", Level.WARN)).isFalse();
+        assertThat(memoryAppender.contains("Ps 800000000001 successfully deleted", Level.INFO)).isTrue();
+        assertThat(memoryAppender.contains("PsRef 800000000001 pointing on Ps 800000000001 successfully removed", Level.INFO)).isTrue();
+        assertThat(memoryAppender.contains("PsRef 800000000011 pointing on Ps 800000000001 successfully removed", Level.INFO)).isTrue();
+        assertThat(memoryAppender.contains("Ps 800000000002 successfully deleted", Level.INFO)).isFalse();
+
+        assertEquals(psRefRepository.count(), 2);
+        assertEquals(psRepository.count(), 2);
+
+        // physical delete of deactivated Ps
+        mockMvc.perform(delete("/api/v1/ps/force/800000000002")
+                .header("Accept", "application/json"))
+                .andExpect(status().is(204));
+
+        assertThat(memoryAppender.contains("Ps 800000000002 successfully deleted", Level.INFO)).isTrue();
+        assertThat(memoryAppender.contains("PsRef 800000000002 pointing on Ps 800000000002 successfully removed", Level.INFO)).isTrue();
+
+        assertEquals(psRefRepository.count(), 1);
+        assertEquals(psRepository.count(), 1);
     }
 }
