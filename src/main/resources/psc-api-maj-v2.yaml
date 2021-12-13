@@ -6,7 +6,7 @@ info:
   contact:
     email: superviseurs.psc@esante.gouv.fr
 servers:
-  - url: 'http://localhost:8080/api/v1'
+  - url: 'http://localhost:8080/api'
     description: local api server
 tags:
   - name: ps
@@ -16,9 +16,9 @@ tags:
   - name: toggle
     description: toggle
 paths:
-  '/ps':
+  /v1/ps:
     post:
-      summary: 'Create new Ps'
+      summary: Create new Ps
       tags:
         - ps
       operationId: create-new-Ps
@@ -39,10 +39,45 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/Ps'
+            examples:
+              PsExample:
+                value:
+                  idType: '8'
+                  id: '00000000001'
+                  nationalId: '800000000001'
+                  lastName: DUPONT
+                  firstName: JIMMY
+                  dateOfBirth: 17/12/1973
+                  birthAddressCode: '57463'
+                  birthCountryCode: '99'
+                  birthAddress: METZ
+                  genderCode: M
+                  phone: '0601020304'
+                  email: jimmy@dupont.fr
+                  salutationCode: M
+                  professions:
+                    - exProId: 50C
+                      code: '50'
+                      categoryCode: C
+                      salutationCode: M
+                      lastName: DUPONT
+                      firstName: JIMMY
+                      expertises:
+                        - expertiseId: SSM69
+                          typeCode: S
+                          code: SM69
+                      workSituations:
+                        - situId: SSA04
+                          modeCode: S
+                          activitySectorCode: SA04
+                          pharmacistTableSectionCode: AC36
+                          roleCode: '12'
+                          structures:
+                            - structureId: '1'
         description: The Ps to be created
         required: true
     put:
-      summary: 'Update Ps'
+      summary: Update Ps
       operationId: update-ps
       responses:
         '200':
@@ -61,10 +96,45 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/Ps'
+            examples:
+              PsExample:
+                value:
+                  idType: '8'
+                  id: '00000000001'
+                  nationalId: '800000000001'
+                  lastName: DUPONT
+                  firstName: JIMMY
+                  dateOfBirth: 17/12/1973
+                  birthAddressCode: '57463'
+                  birthCountryCode: '99'
+                  birthAddress: METZ
+                  genderCode: M
+                  phone: '0601020304'
+                  email: jimmy@dupont.fr
+                  salutationCode: M
+                  professions:
+                    - exProId: 50C
+                      code: '50'
+                      categoryCode: C
+                      salutationCode: M
+                      lastName: DUPONT
+                      firstName: JIMMY
+                      expertises:
+                        - expertiseId: SSM69
+                          typeCode: S
+                          code: SM69
+                      workSituations:
+                        - situId: SSA04
+                          modeCode: S
+                          activitySectorCode: SA04
+                          pharmacistTableSectionCode: AC36
+                          roleCode: '12'
+                          structures:
+                            - structureId: '1'
         required: true
       tags:
         - ps
-  '/ps/{psId}':
+  '/v1/ps/{psId}':
     parameters:
       - schema:
           type: string
@@ -72,7 +142,7 @@ paths:
         in: path
         required: true
     get:
-      summary: 'Get Ps by id'
+      summary: Get Ps by id
       tags:
         - ps
       operationId: get-ps-by-id
@@ -83,6 +153,41 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Ps'
+              examples:
+                PsExample:
+                  value:
+                    idType: '8'
+                    id: '00000000001'
+                    nationalId: '800000000001'
+                    lastName: DUPONT
+                    firstName: JIMMY
+                    dateOfBirth: 17/12/1973
+                    birthAddressCode: '57463'
+                    birthCountryCode: '99'
+                    birthAddress: METZ
+                    genderCode: M
+                    phone: '0601020304'
+                    email: jimmy@dupont.fr
+                    salutationCode: M
+                    professions:
+                      - exProId: 50C
+                        code: '50'
+                        categoryCode: C
+                        salutationCode: M
+                        lastName: DUPONT
+                        firstName: JIMMY
+                        expertises:
+                          - expertiseId: SSM69
+                            typeCode: S
+                            code: SM69
+                        workSituations:
+                          - situId: SSA04
+                            modeCode: S
+                            activitySectorCode: SA04
+                            pharmacistTableSectionCode: AC36
+                            roleCode: '12'
+                            structures:
+                              - structureId: '1'
         '400':
           description: Bad Request
           content:
@@ -93,7 +198,7 @@ paths:
           description: Not Found
       description: get a Ps by one of its idNationalRef
     delete:
-      summary: 'Delete Ps by id'
+      summary: Delete Ps by id
       tags:
         - ps
       operationId: delete-ps-by-id
@@ -109,7 +214,7 @@ paths:
         '404':
           description: Not Found
       description: Delete a PS by its id
-  '/ps/force/{psId}':
+  '/v1/ps/force/{psId}':
     parameters:
       - schema:
           type: string
@@ -117,7 +222,7 @@ paths:
         in: path
         required: true
     delete:
-      summary: 'Physical delete of Ps'
+      summary: Physical delete of Ps
       tags:
         - ps
       operationId: force-delete-ps-by-id
@@ -133,9 +238,9 @@ paths:
         '404':
           description: Not Found
       description: completely delete Ps (not only deactivate it)
-  '/structure':
+  /v1/structure:
     post:
-      summary: 'Create new structure'
+      summary: Create new structure
       tags:
         - structure
       operationId: create-new-structure
@@ -160,9 +265,37 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/Structure'
+            examples:
+              StructureExample:
+                value:
+                  siteSIRET: '12312312312345'
+                  siteSIREN: '123123123'
+                  siteFINESS: '260000451'
+                  legalEstablishmentFINESS: '260006912'
+                  structureTechnicalId: '1'
+                  legalCommercialName: Structure One
+                  publicCommercialName: Structure One
+                  recipientAdditionalInfo: info +
+                  geoLocationAdditionalInfo: geoloc info +
+                  streetNumber: '1'
+                  streetNumberRepetitionIndex: bis
+                  streetCategoryCode: rue
+                  streetLabel: de Paris
+                  distributionMention: c/o M. Dupont
+                  cedexOffice: '75117'
+                  postalCode: '75117'
+                  communeCode: '75117'
+                  countryCode: FR
+                  phone: '0123456789'
+                  phone2: '0623456789'
+                  fax: '0198765432'
+                  email: structure@one.fr
+                  departmentCode: '99'
+                  oldStructureId: '101'
+                  registrationAuthority: ARS/ARS/ARS
         required: true
     put:
-      summary: 'Update structure'
+      summary: Update structure
       tags:
         - structure
       operationId: update-structure
@@ -183,8 +316,36 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/Structure'
+            examples:
+              StructureExample:
+                value:
+                  siteSIRET: '12312312312345'
+                  siteSIREN: '123123123'
+                  siteFINESS: '260000451'
+                  legalEstablishmentFINESS: '260006912'
+                  structureTechnicalId: '1'
+                  legalCommercialName: Structure One
+                  publicCommercialName: Structure One
+                  recipientAdditionalInfo: info +
+                  geoLocationAdditionalInfo: geoloc info +
+                  streetNumber: '1'
+                  streetNumberRepetitionIndex: bis
+                  streetCategoryCode: rue
+                  streetLabel: de Paris
+                  distributionMention: c/o M. Dupont
+                  cedexOffice: '75117'
+                  postalCode: '75117'
+                  communeCode: '75117'
+                  countryCode: FR
+                  phone: '0123456789'
+                  phone2: '0623456789'
+                  fax: '0198765432'
+                  email: structure@one.fr
+                  departmentCode: '99'
+                  oldStructureId: '101'
+                  registrationAuthority: ARS/ARS/ARS
         required: true
-  '/structure/{structureId}':
+  '/v1/structure/{structureId}':
     parameters:
       - schema:
           type: string
@@ -192,7 +353,7 @@ paths:
         in: path
         required: true
     get:
-      summary: 'Get structure by id'
+      summary: Get structure by id
       tags:
         - structure
       responses:
@@ -202,6 +363,34 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Structure'
+              examples:
+                example-1:
+                  value:
+                    siteSIRET: string
+                    siteSIREN: string
+                    siteFINESS: string
+                    legalEstablishmentFINESS: string
+                    structureTechnicalId: string
+                    legalCommercialName: string
+                    publicCommercialName: string
+                    recipientAdditionalInfo: string
+                    geoLocationAdditionalInfo: string
+                    streetNumber: string
+                    streetNumberRepetitionIndex: string
+                    streetCategoryCode: string
+                    streetLabel: string
+                    distributionMention: string
+                    cedexOffice: string
+                    postalCode: string
+                    communeCode: string
+                    countryCode: string
+                    phone: string
+                    phone2: string
+                    fax: string
+                    email: string
+                    departmentCode: string
+                    oldStructureId: string
+                    registrationAuthority: string
         '400':
           description: Bad Request
           content:
@@ -213,7 +402,7 @@ paths:
       operationId: get-structure-by-id
       description: Get structure by id
     delete:
-      summary: 'Delete structure by id'
+      summary: Delete structure by id
       tags:
         - structure
       operationId: delete-structure-by-structureId
@@ -229,9 +418,9 @@ paths:
         '404':
           description: Not Found
       description: Delete structure by structureId
-  /toggle:
+  /v1/toggle:
     put:
-      summary: 'toggle PsRef mapping'
+      summary: toggle PsRef mapping
       operationId: toggle-psref
       responses:
         '200':
@@ -252,13 +441,20 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/PsRef'
+            examples:
+              ToggleExample:
+                value:
+                  nationalIdRef: '000000000001'
+                  nationalId: '80000000001'
+                  activated: null
+                  deactivated: null
         required: true
       tags:
         - toggle
 components:
   schemas:
     Expertise:
-      description: 'Expertise'
+      description: Expertise
       type: object
       properties:
         expertiseId:
@@ -267,8 +463,13 @@ components:
           type: string
         code:
           type: string
+      x-examples:
+        ExpertiseExample:
+          expertiseId: SSM69
+          typeCode: S
+          code: SM69
     Structure:
-      description: 'Structure de Santé'
+      description: Structure de Santé
       type: object
       properties:
         siteSIRET:
@@ -324,8 +525,35 @@ components:
           type: string
       required:
         - structureTechnicalId
+      x-examples:
+        StructureExample:
+          siteSIRET: '12312312312345'
+          siteSIREN: '123123123'
+          siteFINESS: '260000451'
+          legalEstablishmentFINESS: '260006912'
+          structureTechnicalId: '1'
+          legalCommercialName: Structure One
+          publicCommercialName: Structure One
+          recipientAdditionalInfo: info +
+          geoLocationAdditionalInfo: geoloc info +
+          streetNumber: '1'
+          streetNumberRepetitionIndex: bis
+          streetCategoryCode: rue
+          streetLabel: de Paris
+          distributionMention: c/o M. Dupont
+          cedexOffice: '75117'
+          postalCode: '75117'
+          communeCode: '75117'
+          countryCode: FR
+          phone: '0123456789'
+          phone2: '0623456789'
+          fax: '0198765432'
+          email: structure@one.fr
+          departmentCode: '99'
+          oldStructureId: '101'
+          registrationAuthority: ARS/ARS/ARS
     WorkSituation:
-      description: 'Situation d exercice'
+      description: Situation d exercice
       type: object
       properties:
         situId:
@@ -343,16 +571,28 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/StructureRef'
+      x-examples:
+        WorkSituationExample:
+          situId: SSA04
+          modeCode: S
+          activitySectorCode: SA04
+          pharmacistTableSectionCode: AC36
+          roleCode: '12'
+          structures:
+            - structureId: '1'
     StructureRef:
-      description: 'Structure reference'
+      description: Structure reference
       type: object
       properties:
         structureId:
           type: string
       required:
         - structureId
+      x-examples:
+        StructureRefExample:
+          structureId: '1'
     Profession:
-      description: 'Profession'
+      description: Profession
       type: object
       properties:
         exProId:
@@ -375,9 +615,35 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/WorkSituation'
+      x-examples:
+        ProfessionExample:
+          exProId: 50C
+          code: '50'
+          categoryCode: C
+          salutationCode: M
+          lastName: DUPONT
+          firstName: JIMMY
+          expertises:
+            - expertiseId: SSM69
+              typeCode: S
+              code: SM69
+          workSituations:
+            - situId: SSA04
+              modeCode: S
+              activitySectorCode: SA04
+              pharmacistTableSectionCode: AC36
+              roleCode: '12'
+              structures:
+                - structureId: '1'
     PsRef:
-      description: 'Mapping identifier to Ps'
+      description: Mapping identifier to Ps
       type: object
+      x-examples:
+        PsRefExample:
+          nationalIdRef: '800000000001'
+          nationalId: '800000000001'
+          activated: 1638791221
+          deactivated: null
       properties:
         nationalIdRef:
           type: string
@@ -386,14 +652,15 @@ components:
           type: string
           minLength: 1
         activated:
-          type: string
+          type: number
         deactivated:
-          type: string
+          type: number
+          nullable: true
       required:
         - nationalIdRef
         - nationalId
     Ps:
-      description: 'Professionnel de santé'
+      description: Professionnel de santé
       type: object
       properties:
         idType:
@@ -429,6 +696,40 @@ components:
             $ref: '#/components/schemas/Profession'
       required:
         - nationalId
+      x-examples:
+        PsExample:
+          idType: '8'
+          id: '00000000001'
+          nationalId: '800000000001'
+          lastName: DUPONT
+          firstName: JIMMY
+          dateOfBirth: 17/12/1973
+          birthAddressCode: '57463'
+          birthCountryCode: '99'
+          birthAddress: METZ
+          genderCode: M
+          phone: '0601020304'
+          email: jimmy@dupont.fr
+          salutationCode: M
+          professions:
+            - exProId: 50C
+              code: '50'
+              categoryCode: C
+              salutationCode: M
+              lastName: DUPONT
+              firstName: JIMMY
+              expertises:
+                - expertiseId: SSM69
+                  typeCode: S
+                  code: SM69
+              workSituations:
+                - situId: SSA04
+                  modeCode: S
+                  activitySectorCode: SA04
+                  pharmacistTableSectionCode: AC36
+                  roleCode: '12'
+                  structures:
+                    - structureId: '1'
     Error:
       title: Error
       type: object
@@ -439,3 +740,8 @@ components:
           type: array
           items:
             type: string
+      x-examples:
+        ErrorExample:
+          httpStatus: 500
+          message:
+            - MongoInterruptedException

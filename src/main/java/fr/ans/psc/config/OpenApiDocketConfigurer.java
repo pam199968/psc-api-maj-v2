@@ -1,6 +1,7 @@
 package fr.ans.psc.config;
 
 
+import io.swagger.annotations.ApiOperation;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import springfox.documentation.builders.ApiInfoBuilder;
@@ -23,8 +24,8 @@ public class OpenApiDocketConfigurer {
                         .license("MIT")
                         .licenseUrl("https://opensource.org/licenses/MIT%22")
                         .build())
-                        .tags(new Tag("Note", "Endpoints for CRUD operations on notes"))
-                        .select().apis(RequestHandlerSelectors.any())
+//                        .tags(new Tag("Note", "Endpoints for CRUD operations on notes"))
+                        .select().apis(RequestHandlerSelectors.withMethodAnnotation(ApiOperation.class))
                         .build();
 
     }

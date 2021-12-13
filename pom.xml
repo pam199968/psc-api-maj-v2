@@ -219,7 +219,7 @@
 						<configuration>
 							<!-- ce fichier doit être dans src/main/asciidoc qui doit contenir 
 								les snippets à intégrer -->
-							<sourceDocumentName>esignsante-psc-api.adoc</sourceDocumentName>
+							<sourceDocumentName>psc-api-maj.adoc</sourceDocumentName>
 
 							<backend>html</backend>
 							<doctype>book</doctype>
