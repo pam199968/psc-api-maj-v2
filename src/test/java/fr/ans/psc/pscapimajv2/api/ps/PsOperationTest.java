@@ -100,6 +100,22 @@ public class PsOperationTest {
     }
 
     @Test
+    @DisplayName(value = "should not get Ps if missing header")
+    @MongoDataSet(value = "/dataset/ps_2_psref_entries.json", cleanBefore = true, cleanAfter = true)
+    public void getPsWithWrongHeaderFailed() throws Exception {
+        mockMvc.perform(get("/api/v1/ps/800000000001"))
+                .andExpect(status().is(415));
+    }
+
+    @Test
+    @DisplayName(value = "should not get Ps if wrong accept header")
+    @MongoDataSet(value = "/dataset/ps_2_psref_entries.json", cleanBefore = true, cleanAfter = true)
+    public void getPsWithoutJsonAcceptHeaderFailed() throws Exception {
+        mockMvc.perform(get("/api/v1/ps/800000000001").header("Accept","application/xml"))
+                .andExpect(status().is(406));
+    }
+
+    @Test
     @DisplayName(value = "should not get Ps if deactivated")
     @MongoDataSet(value = "/dataset/deactivated_ps.json", cleanBefore = true, cleanAfter = true)
     public void getPsDeactivated() throws Exception {
@@ -123,13 +139,13 @@ public class PsOperationTest {
     @DisplayName(value = "should create a brand new Ps")
     public void createNewPs() throws Exception {
         mockMvc.perform(post("/api/v1/ps").header("Accept", "application/json")
-                .contentType("application/json").content("{\"_id\":\"61b10a354be1c57efb1f8131\",\"idType\":\"8\",\"id\":\"00000000001\","+
-                        "\"nationalId\":\"800000000001\",\"lastName\":\"DOE\",\"firstName\":\"JOHN''\",\"dateOfBirth\":\"17/12/1983\","+
-                        "\"birthAddressCode\":\"57463\",\"birthCountryCode\":\"99000\",\"birthAddress\":\"METZ\",\"genderCode\":\"F\","+
-                        "\"phone\":\"0601020304\",\"email\":\"toto57@hotmail.fr\",\"salutationCode\":\"MME\",\"professions\":[{\"exProId\":\"50C\","+
-                        "\"code\":\"50\",\"categoryCode\":\"C\",\"salutationCode\":\"M\",\"lastName\":\"McNULTY\",\"firstName\":\"JIMMY\","+
-                        "\"expertises\":[{\"expertiseId\":\"SSM69\",\"typeCode\":\"S\",\"code\":\"SM69\"}],\"workSituations\":[{\"situId\":\"SSA04\","+
-                        "\"modeCode\":\"S\",\"activitySectorCode\":\"SA04\",\"pharmacistTableSectionCode\":\"AC36\",\"roleCode\":\"12\","+
+                .contentType("application/json").content("{\"_id\":\"61b10a354be1c57efb1f8131\",\"idType\":\"8\",\"id\":\"00000000001\"," +
+                        "\"nationalId\":\"800000000001\",\"lastName\":\"DOE\",\"firstName\":\"JOHN''\",\"dateOfBirth\":\"17/12/1983\"," +
+                        "\"birthAddressCode\":\"57463\",\"birthCountryCode\":\"99000\",\"birthAddress\":\"METZ\",\"genderCode\":\"F\"," +
+                        "\"phone\":\"0601020304\",\"email\":\"toto57@hotmail.fr\",\"salutationCode\":\"MME\",\"professions\":[{\"exProId\":\"50C\"," +
+                        "\"code\":\"50\",\"categoryCode\":\"C\",\"salutationCode\":\"M\",\"lastName\":\"McNULTY\",\"firstName\":\"JIMMY\"," +
+                        "\"expertises\":[{\"expertiseId\":\"SSM69\",\"typeCode\":\"S\",\"code\":\"SM69\"}],\"workSituations\":[{\"situId\":\"SSA04\"," +
+                        "\"modeCode\":\"S\",\"activitySectorCode\":\"SA04\",\"pharmacistTableSectionCode\":\"AC36\",\"roleCode\":\"12\"," +
                         "\"structures\":[{\"structureId\":\"1\"}]}]}]}"))
                 .andExpect(status().is(201));
         assertThat(memoryAppender.contains("Ps 800000000001 successfully stored or updated", Level.INFO)).isTrue();
@@ -141,7 +157,7 @@ public class PsOperationTest {
     @MongoDataSet(value = "/dataset/ps_2_psref_entries.json", cleanBefore = true, cleanAfter = true)
     public void createStillActivatedPsFailed() throws Exception {
         mockMvc.perform(post("/api/v1/ps").header("Accept", "application/json")
-        .contentType("application/json").content("{\n" +
+                .contentType("application/json").content("{\n" +
                         "\"idType\": \"8\",\n" +
                         "\"id\": \"00000000001\",\n" +
                         "\"nationalId\": \"800000000001\"\n" +
@@ -228,10 +244,10 @@ public class PsOperationTest {
     public void updateAbsentPsFailed() throws Exception {
         mockMvc.perform(put("/api/v1/ps").header("Accept", "application/json")
                 .contentType("application/json").content("{\n" +
-                "\"idType\": \"8\",\n" +
-                "\"id\": \"00000000001\",\n" +
-                "\"nationalId\": \"800000000001\"\n" +
-                "}"))
+                        "\"idType\": \"8\",\n" +
+                        "\"id\": \"00000000001\",\n" +
+                        "\"nationalId\": \"800000000001\"\n" +
+                        "}"))
                 .andExpect(status().is(404));
 
         assertThat(memoryAppender.contains("No Ps found with nationalId 800000000001, can not update it", Level.WARN)).isTrue();

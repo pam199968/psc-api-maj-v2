@@ -30,6 +30,9 @@ public class PsApiDelegateImpl extends AbstractApiDelegate implements PsApiDeleg
 
     @Override
     public ResponseEntity<Ps> getPsById(String psId) {
+        if (!isAcceptHeaderPresent(getAcceptHeaders(), "application/json")) {
+            return new ResponseEntity<>(HttpStatus.UNSUPPORTED_MEDIA_TYPE);
+        }
 
         PsRef psRef = psRefRepository.findPsRefByNationalIdRef(psId);
 
