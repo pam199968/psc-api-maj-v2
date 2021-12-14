@@ -4,19 +4,14 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import static org.assertj.core.api.Assertions.*;
 
 import ch.qos.logback.classic.LoggerContext;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectWriter;
 import com.jupiter.tools.spring.test.mongo.annotation.ExpectedMongoDataSet;
 import com.jupiter.tools.spring.test.mongo.annotation.MongoDataSet;
-import com.jupiter.tools.spring.test.mongo.junit5.MongoDbExtension;
-import fr.ans.psc.PscApiMajApplication;
 import fr.ans.psc.delegate.PsApiDelegateImpl;
 import fr.ans.psc.model.Ps;
 import fr.ans.psc.model.PsRef;
@@ -24,57 +19,25 @@ import fr.ans.psc.repository.PsRefRepository;
 import fr.ans.psc.repository.PsRepository;
 import fr.ans.psc.utils.ApiUtils;
 import fr.ans.psc.utils.MemoryAppender;
-import org.junit.Rule;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 
 import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.data.mongo.AutoConfigureDataMongo;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.mongodb.MongoDatabaseFactory;
-import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.restdocs.JUnitRestDocumentation;
 import org.springframework.restdocs.RestDocumentationContextProvider;
-import org.springframework.restdocs.RestDocumentationExtension;
-import org.springframework.restdocs.mockmvc.RestDocumentationResultHandler;
-import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-import java.util.List;
+public class PsOperationTest extends BaseOperationTest {
 
-@ExtendWith({RestDocumentationExtension.class, SpringExtension.class, MongoDbExtension.class}) // pour restdocs
-@SpringBootTest
-@AutoConfigureMockMvc
-@AutoConfigureDataMongo
-@ContextConfiguration(classes = PscApiMajApplication.class)
-@DirtiesContext
-@ActiveProfiles("test")
-public class PsOperationTest {
-
-    @Autowired
-    private MockMvc mockMvc;
     @Autowired
     private PsRepository psRepository;
     @Autowired
     private PsRefRepository psRefRepository;
-
-    @Rule
-    protected JUnitRestDocumentation restDocumentation = new JUnitRestDocumentation("target/generated-snippets");
-
-    private MemoryAppender memoryAppender;
-    private final ObjectWriter objectWriter = new ObjectMapper().writer().withDefaultPrettyPrinter();
 
     @BeforeEach
     public void setUp(WebApplicationContext context, RestDocumentationContextProvider restDocProvider) {
@@ -120,7 +83,7 @@ public class PsOperationTest {
     @Test
     @DisplayName(value = "should not get Ps if missing header")
     @MongoDataSet(value = "/dataset/ps_2_psref_entries.json", cleanBefore = true, cleanAfter = true)
-    public void getPsWithWrongHeaderFailed() throws Exception {
+    public void getPsWithoutJsonAcceptHeaderFailed() throws Exception {
         mockMvc.perform(get("/api/v1/ps/800000000001"))
                 .andExpect(status().is(415));
     }
@@ -128,7 +91,7 @@ public class PsOperationTest {
     @Test
     @DisplayName(value = "should not get Ps if wrong accept header")
     @MongoDataSet(value = "/dataset/ps_2_psref_entries.json", cleanBefore = true, cleanAfter = true)
-    public void getPsWithoutJsonAcceptHeaderFailed() throws Exception {
+    public void getPsWithWrongHeaderFailed() throws Exception {
         mockMvc.perform(get("/api/v1/ps/800000000001").header("Accept","application/xml"))
                 .andExpect(status().is(406));
     }
@@ -170,6 +133,28 @@ public class PsOperationTest {
         assertThat(memoryAppender.contains("PsRef 800000000001 has been reactivated", Level.INFO)).isFalse();
 
         createdPs.andDo(document("PsOperationTest/create_new_Ps"));
+    }
+
+    @Test
+    @DisplayName(value = "should reject post request if wrong content-type")
+    public void createPsWrongContentTypeFailed() throws Exception {
+        mockMvc.perform(post("/api/v1/ps").header("Accept", "application/json")
+                .contentType("application/xml").content("{\"idType\":\"8\",\"id\":\"00000000001\"," +
+                        "\"nationalId\":\"800000000001\"}"))
+                .andExpect(status().is(415));
+        assertThat(memoryAppender.contains("Ps 800000000001 successfully stored or updated", Level.INFO)).isFalse();
+        assertThat(memoryAppender.contains("PsRef 800000000001 has been reactivated", Level.INFO)).isFalse();
+    }
+
+    @Test
+    @DisplayName(value = "should reject post request if content-type absent")
+    public void createPsAbsentContentTypeFailed() throws Exception {
+        mockMvc.perform(post("/api/v1/ps").header("Accept", "application/json")
+                .content("{\"idType\":\"8\",\"id\":\"00000000001\"," +
+                        "\"nationalId\":\"800000000001\"}"))
+                .andExpect(status().is(415));
+        assertThat(memoryAppender.contains("Ps 800000000001 successfully stored or updated", Level.INFO)).isFalse();
+        assertThat(memoryAppender.contains("PsRef 800000000001 has been reactivated", Level.INFO)).isFalse();
     }
 
     @Test
@@ -215,8 +200,7 @@ public class PsOperationTest {
     @DisplayName(value = "should delete Ps by Id")
     @MongoDataSet(value = "/dataset/ps_2_psref_entries.json", cleanBefore = true, cleanAfter = true)
     public void deletePsById() throws Exception {
-        ResultActions deletedPs = mockMvc.perform(delete("/api/v1/ps/800000000001")
-                .header("Accept", "application/json"))
+        ResultActions deletedPs = mockMvc.perform(delete("/api/v1/ps/800000000001"))
                 .andExpect(status().is(204));
 
         assertThat(memoryAppender.contains("No Ps found with nationalId 800000000001, will not be deleted", Level.WARN)).isFalse();

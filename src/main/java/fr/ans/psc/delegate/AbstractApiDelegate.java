@@ -1,4 +1,4 @@
-/**
+/*
  * (c) Copyright 1998-2021, ANS. All rights reserved.
  */
 package fr.ans.psc.delegate;
@@ -23,10 +23,8 @@ public abstract class AbstractApiDelegate {
 
 	protected String msgError = "";
 
-	public static final String HEADER_TYPE_APP_WILDCARD = "application/*";
+	public static final String HEADER_TYPE_APP_WILDCARD = "application/json";
 	public static final String HEADER_TYPE_FULL_WILDCARD = "*/*";
-
-	private static final Path TMP_PATH = Paths.get(System.getProperty("java.io.tmpdir"));
 
 	/**
 	 * Gets the request

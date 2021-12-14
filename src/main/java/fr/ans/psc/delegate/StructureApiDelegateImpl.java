@@ -23,8 +23,11 @@ public class StructureApiDelegateImpl extends AbstractApiDelegate implements Str
 
     @Override
     public ResponseEntity<Structure> getStructureById(String structureId) {
-        Structure structure = structureRepository.findByStructureTechnicalId(structureId);
+        if (!isAcceptHeaderPresent(getAcceptHeaders(), "application/json")) {
+            return new ResponseEntity<>(HttpStatus.UNSUPPORTED_MEDIA_TYPE);
+        }
 
+        Structure structure = structureRepository.findByStructureTechnicalId(structureId);
         if (structure == null) {
             log.warn("Structure {} not found", structureId);
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
