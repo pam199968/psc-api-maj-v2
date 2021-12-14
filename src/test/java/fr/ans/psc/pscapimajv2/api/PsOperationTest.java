@@ -1,6 +1,8 @@
-package fr.ans.psc.pscapimajv2.api.ps;
+package fr.ans.psc.pscapimajv2.api;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -22,6 +24,7 @@ import fr.ans.psc.repository.PsRefRepository;
 import fr.ans.psc.repository.PsRepository;
 import fr.ans.psc.utils.ApiUtils;
 import fr.ans.psc.utils.MemoryAppender;
+import org.junit.Rule;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -36,13 +39,18 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.mongodb.MongoDatabaseFactory;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.restdocs.JUnitRestDocumentation;
+import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.RestDocumentationExtension;
+import org.springframework.restdocs.mockmvc.RestDocumentationResultHandler;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.context.WebApplicationContext;
 
 import java.util.List;
 
@@ -62,17 +70,25 @@ public class PsOperationTest {
     @Autowired
     private PsRefRepository psRefRepository;
 
+    @Rule
+    protected JUnitRestDocumentation restDocumentation = new JUnitRestDocumentation("target/generated-snippets");
+
     private MemoryAppender memoryAppender;
     private final ObjectWriter objectWriter = new ObjectMapper().writer().withDefaultPrettyPrinter();
 
     @BeforeEach
-    public void setUp() {
+    public void setUp(WebApplicationContext context, RestDocumentationContextProvider restDocProvider) {
+        // LOG APPENDER
         Logger logger = (Logger) LoggerFactory.getLogger(PsApiDelegateImpl.class);
         memoryAppender = new MemoryAppender();
         memoryAppender.setContext((LoggerContext) LoggerFactory.getILoggerFactory());
         logger.setLevel(Level.INFO);
         logger.addAppender(memoryAppender);
         memoryAppender.start();
+
+        // REST DOCS
+        this.mockMvc = MockMvcBuilders.webAppContextSetup(context).apply(documentationConfiguration(restDocProvider))
+                .build();
     }
 
     @Test
@@ -89,6 +105,8 @@ public class PsOperationTest {
 
         firstPsRefRequest.andExpect(content().json(psAsJsonString));
         assertThat(memoryAppender.contains("Ps 800000000001 has been found", Level.INFO)).isTrue();
+
+        firstPsRefRequest.andDo(document("PsOperationTest/get_Ps_by_id"));
 
         ResultActions secondPsRefRequest = mockMvc.perform(get("/api/v1/ps/800000000011")
                 .header("Accept", "application/json"))
@@ -138,18 +156,20 @@ public class PsOperationTest {
     @Test
     @DisplayName(value = "should create a brand new Ps")
     public void createNewPs() throws Exception {
-        mockMvc.perform(post("/api/v1/ps").header("Accept", "application/json")
-                .contentType("application/json").content("{\"_id\":\"61b10a354be1c57efb1f8131\",\"idType\":\"8\",\"id\":\"00000000001\"," +
-                        "\"nationalId\":\"800000000001\",\"lastName\":\"DOE\",\"firstName\":\"JOHN''\",\"dateOfBirth\":\"17/12/1983\"," +
-                        "\"birthAddressCode\":\"57463\",\"birthCountryCode\":\"99000\",\"birthAddress\":\"METZ\",\"genderCode\":\"F\"," +
+        ResultActions createdPs = mockMvc.perform(post("/api/v1/ps").header("Accept", "application/json")
+                .contentType("application/json").content("{\"idType\":\"8\",\"id\":\"00000000001\"," +
+                        "\"nationalId\":\"800000000001\",\"lastName\":\"DUPONT\",\"firstName\":\"JIMMY''\",\"dateOfBirth\":\"17/12/1983\"," +
+                        "\"birthAddressCode\":\"57463\",\"birthCountryCode\":\"99000\",\"birthAddress\":\"METZ\",\"genderCode\":\"M\"," +
                         "\"phone\":\"0601020304\",\"email\":\"toto57@hotmail.fr\",\"salutationCode\":\"MME\",\"professions\":[{\"exProId\":\"50C\"," +
-                        "\"code\":\"50\",\"categoryCode\":\"C\",\"salutationCode\":\"M\",\"lastName\":\"McNULTY\",\"firstName\":\"JIMMY\"," +
+                        "\"code\":\"50\",\"categoryCode\":\"C\",\"salutationCode\":\"M\",\"lastName\":\"DUPONT\",\"firstName\":\"JIMMY\"," +
                         "\"expertises\":[{\"expertiseId\":\"SSM69\",\"typeCode\":\"S\",\"code\":\"SM69\"}],\"workSituations\":[{\"situId\":\"SSA04\"," +
                         "\"modeCode\":\"S\",\"activitySectorCode\":\"SA04\",\"pharmacistTableSectionCode\":\"AC36\",\"roleCode\":\"12\"," +
                         "\"structures\":[{\"structureId\":\"1\"}]}]}]}"))
                 .andExpect(status().is(201));
         assertThat(memoryAppender.contains("Ps 800000000001 successfully stored or updated", Level.INFO)).isTrue();
         assertThat(memoryAppender.contains("PsRef 800000000001 has been reactivated", Level.INFO)).isFalse();
+
+        createdPs.andDo(document("PsOperationTest/create_new_Ps"));
     }
 
     @Test
@@ -195,7 +215,7 @@ public class PsOperationTest {
     @DisplayName(value = "should delete Ps by Id")
     @MongoDataSet(value = "/dataset/ps_2_psref_entries.json", cleanBefore = true, cleanAfter = true)
     public void deletePsById() throws Exception {
-        mockMvc.perform(delete("/api/v1/ps/800000000001")
+        ResultActions deletedPs = mockMvc.perform(delete("/api/v1/ps/800000000001")
                 .header("Accept", "application/json"))
                 .andExpect(status().is(204));
 
@@ -208,6 +228,8 @@ public class PsOperationTest {
 
         assertThat(ApiUtils.isPsRefActivated(psRef1)).isFalse();
         assertThat(ApiUtils.isPsRefActivated(psRef2)).isFalse();
+
+        deletedPs.andDo(document("PsOperationTest/delete_Ps_by_id"));
     }
 
     @Test
@@ -226,8 +248,8 @@ public class PsOperationTest {
     @Test
     @DisplayName(value = "should update Ps")
     @MongoDataSet(value = "/dataset/ps_2_psref_entries.json", cleanBefore = true, cleanAfter = true)
-    public void updatePsById() throws Exception {
-        mockMvc.perform(put("/api/v1/ps").header("Accept", "application/json")
+    public void updatePs() throws Exception {
+        ResultActions updatedPs = mockMvc.perform(put("/api/v1/ps").header("Accept", "application/json")
                 .contentType("application/json").content("{\n" +
                         "\"idType\": \"8\",\n" +
                         "\"id\": \"00000000001\",\n" +
@@ -237,6 +259,8 @@ public class PsOperationTest {
 
         assertThat(memoryAppender.contains("No Ps found with nationalId 800000000001, can not update it", Level.WARN)).isFalse();
         assertThat(memoryAppender.contains("Ps 800000000001 successfully updated", Level.INFO)).isTrue();
+
+        updatedPs.andDo(document("PsOperationTest/update_Ps"));
     }
 
     @Test

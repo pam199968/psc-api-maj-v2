@@ -1,4 +1,4 @@
-package fr.ans.psc.pscapimajv2.api.ps;
+package fr.ans.psc.pscapimajv2.api;
 
 import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.Logger;
@@ -12,6 +12,7 @@ import fr.ans.psc.delegate.StructureApiDelegateImpl;
 import fr.ans.psc.model.Structure;
 import fr.ans.psc.repository.StructureRepository;
 import fr.ans.psc.utils.MemoryAppender;
+import org.junit.Rule;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -21,15 +22,22 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.mongo.AutoConfigureDataMongo;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.restdocs.JUnitRestDocumentation;
+import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.RestDocumentationExtension;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.context.WebApplicationContext;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -49,17 +57,24 @@ public class StructureOperationTest {
     @Autowired
     private StructureRepository structureRepository;
 
+    @Rule
+    protected JUnitRestDocumentation restDocumentation = new JUnitRestDocumentation("target/generated-snippets");
+
     private MemoryAppender memoryAppender;
     private final ObjectWriter objectWriter = new ObjectMapper().writer().withDefaultPrettyPrinter();
 
     @BeforeEach
-    public void setUp() {
+    public void setUp(WebApplicationContext context, RestDocumentationContextProvider restDocProvider) {
         Logger logger = (Logger) LoggerFactory.getLogger(StructureApiDelegateImpl.class);
         memoryAppender = new MemoryAppender();
         memoryAppender.setContext((LoggerContext) LoggerFactory.getILoggerFactory());
         logger.setLevel(Level.INFO);
         logger.addAppender(memoryAppender);
         memoryAppender.start();
+
+        // REST DOCS
+        this.mockMvc = MockMvcBuilders.webAppContextSetup(context).apply(documentationConfiguration(restDocProvider))
+                .build();
     }
 
     @Test
@@ -69,10 +84,11 @@ public class StructureOperationTest {
         Structure structure = structureRepository.findByStructureTechnicalId("1");
         String structureAsJsonString = objectWriter.writeValueAsString(structure);
 
-        mockMvc.perform(get("/api/v1/structure/1").header("Accept", "application/json"))
+        ResultActions getStructure = mockMvc.perform(get("/api/v1/structure/1").header("Accept", "application/json"))
                 .andExpect(status().is(200)).andExpect(content().json(structureAsJsonString));
 
         assertThat(memoryAppender.contains("Structure 1 has been found", Level.INFO)).isTrue();
+        getStructure.andDo(document("StructureOperationTest/get_structure_by_id"));
     }
 
     @Test
@@ -88,7 +104,7 @@ public class StructureOperationTest {
     @Test
     @DisplayName(value = "should create a new structure")
     public void createNewStructure() throws Exception {
-        mockMvc.perform(post("/api/v1/structure").header("Accept", "application/json")
+        ResultActions createdStructure = mockMvc.perform(post("/api/v1/structure").header("Accept", "application/json")
                 .contentType("application/json").content("{\"_id\":\"61b0debad9b1af764debd6fa\",\"siteSIRET\":\"125 137 196 15574\"," +
                         "\"siteSIREN\":\"125 137 196\",\"siteFINESS\":null,\"legalEstablishmentFINESS\":null,\"structureTechnicalId\":\"1\","+
                         "\"legalCommercialName\":\"Structure One\",\"publicCommercialName\":\"Structure One\",\"recipientAdditionalInfo\":\"info +\","+
@@ -101,6 +117,8 @@ public class StructureOperationTest {
         assertEquals(structureRepository.count(), 1);
         assertEquals(structureRepository.findByStructureTechnicalId("1").getLegalCommercialName(),"Structure One");
         assertThat(memoryAppender.contains("New structure created with structure technical id 1", Level.INFO)).isTrue();
+
+        createdStructure.andDo(document("StructureOperationTest/create_new_structure"));
     }
 
     @Test
@@ -141,13 +159,15 @@ public class StructureOperationTest {
         Structure structure = structureRepository.findByStructureTechnicalId("1");
         assertEquals(structure.getLegalCommercialName(), "Structure One");
 
-        mockMvc.perform(put("/api/v1/structure").header("Accept", "application/json")
+        ResultActions updatedStructure = mockMvc.perform(put("/api/v1/structure").header("Accept", "application/json")
                 .contentType("application/json").content("{\"structureTechnicalId\":\"1\",\"legalCommercialName\":\"Structure updated\"}"))
                 .andExpect(status().is(200));
 
         assertThat(memoryAppender.contains("Structure 1 successfully updated", Level.INFO)).isTrue();
         structure = structureRepository.findByStructureTechnicalId("1");
         assertEquals(structure.getLegalCommercialName(), "Structure updated");
+
+        updatedStructure.andDo(document("StructureOperationTest/update_structure"));
     }
 
     @Test
@@ -166,11 +186,13 @@ public class StructureOperationTest {
     @DisplayName(value = "should delete a structure")
     @MongoDataSet(value = "/dataset/structure.json", cleanBefore = true, cleanAfter = true)
     public void deleteStructureById() throws Exception {
-        mockMvc.perform(delete("/api/v1/structure/1").header("Accept", "application/json"))
+        ResultActions deletedStructure = mockMvc.perform(delete("/api/v1/structure/1").header("Accept", "application/json"))
                 .andExpect(status().is(204));
 
         assertThat(memoryAppender.contains("Structure 1 successfully removed", Level.INFO)).isTrue();
         assertEquals(structureRepository.count(), 1);
+
+        deletedStructure.andDo(document("StructureOperationTest/delete_structure_by_id"));
     }
 
     @Test

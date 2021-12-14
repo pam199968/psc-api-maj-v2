@@ -1,4 +1,4 @@
-package fr.ans.psc.pscapimajv2.api.ps;
+package fr.ans.psc.pscapimajv2.api;
 
 import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.Logger;

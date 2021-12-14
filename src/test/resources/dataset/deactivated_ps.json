@@ -12,16 +12,16 @@
       "birthAddress": "METZ",
       "genderCode": "F",
       "phone": "0601020304",
-      "email": "zinoviev@hotmail.fr",
+      "email": "jane.doe@hotmail.fr",
       "salutationCode": "MME",
       "professions": [
         {
           "exProId": "50C",
           "code": "50",
           "categoryCode": "C",
-          "salutationCode": "M",
-          "lastName": "MCNULTY",
-          "firstName": "JIMMY",
+          "salutationCode": "MME",
+          "lastName": "DOE",
+          "firstName": "JANE",
           "expertises": [
             {
               "expertiseId": "SSM69",

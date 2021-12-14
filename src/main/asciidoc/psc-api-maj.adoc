@@ -1,0 +1,15 @@
+= ProSanteConnect API Mise à jour - PS & Structure CRUD
+
+== Vue d'ensemble / Overview
+Ce site sert la documentation de l'API de mise à jour unitaire de Professionnels de santé de ProSanteConnect. +
+This site serves the documentation for ProSanteConnect CRUD API.
+
+Pour tester l'API, vous pouvez utiliser swagger : +
+To test the API you can use swagger: +
+https://app.swaggerhub.com/apis/sec-psc/psc-api_maj_v_2/1.0#/
+
+include::chapters/ps-operations.adoc[]
+
+include::chapters/structure-operations.adoc[]
+
+include::chapters/toggle-operations.adoc[]
