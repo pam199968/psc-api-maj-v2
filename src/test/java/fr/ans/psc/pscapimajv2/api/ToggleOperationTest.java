@@ -14,11 +14,13 @@ import org.junit.jupiter.api.Test;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.restdocs.RestDocumentationContextProvider;
+import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -51,9 +53,11 @@ public class ToggleOperationTest extends BaseOperationTest {
         assertEquals(psRefRepository.findPsRefByNationalIdRef("01").getNationalId(), "01");
         assertEquals(psRefRepository.findPsRefByNationalIdRef("81").getNationalId(), "81");
 
-        mockMvc.perform(put("/api/v1/toggle").header("Accept", "application/json")
+        ResultActions toggleOperation = mockMvc.perform(put("/api/v1/toggle").header("Accept", "application/json")
                 .contentType("application/json").content("{\"nationalIdRef\": \"01\", \"nationalId\": \"81\"}"))
                 .andExpect(status().is(200));
+
+        toggleOperation.andDo(document("ToggleOperationTest/toggle_psref"));
 
         assertThat(memoryAppender.contains("Ps 01 successfully removed", Level.INFO)).isTrue();
         assertThat(memoryAppender.contains("PsRef 01 is now referencing Ps 81", Level.INFO)).isTrue();
