@@ -14,7 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Slf4j
-public class ToggleApiDelegateImpl extends AbstractApiDelegate implements ToggleApiDelegate {
+public class ToggleApiDelegateImpl implements ToggleApiDelegate {
 
     private final PsRefRepository psRefRepository;
     private final PsRepository psRepository;

@@ -71,11 +71,11 @@ public class StructureOperationTest extends BaseOperationTest {
     }
 
     @Test
-    @DisplayName(value = "should not get Structure if missing header")
+    @DisplayName(value = "should get Structure if missing header")
     @MongoDataSet(value = "/dataset/structure.json", cleanBefore = true, cleanAfter = true)
-    public void getStructureWithoutJsonAcceptHeaderFailed() throws Exception {
+    public void getStructureWithoutJsonAcceptHeader() throws Exception {
         mockMvc.perform(get("/api/v1/structure/2"))
-                .andExpect(status().is(415));
+                .andExpect(status().is(200));
     }
 
     @Test

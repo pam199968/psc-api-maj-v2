@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @Slf4j
-public class StructureApiDelegateImpl extends AbstractApiDelegate implements StructureApiDelegate {
+public class StructureApiDelegateImpl implements StructureApiDelegate {
 
     private final StructureRepository structureRepository;
     private final MongoTemplate mongoTemplate;
@@ -23,9 +23,6 @@ public class StructureApiDelegateImpl extends AbstractApiDelegate implements Str
 
     @Override
     public ResponseEntity<Structure> getStructureById(String structureId) {
-        if (!isAcceptHeaderPresent(getAcceptHeaders(), "application/json")) {
-            return new ResponseEntity<>(HttpStatus.UNSUPPORTED_MEDIA_TYPE);
-        }
 
         Structure structure = structureRepository.findByStructureTechnicalId(structureId);
         if (structure == null) {

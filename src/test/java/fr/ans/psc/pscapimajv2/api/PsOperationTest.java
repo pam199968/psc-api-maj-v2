@@ -81,11 +81,11 @@ public class PsOperationTest extends BaseOperationTest {
     }
 
     @Test
-    @DisplayName(value = "should not get Ps if missing header")
+    @DisplayName(value = "should get Ps if missing header")
     @MongoDataSet(value = "/dataset/ps_2_psref_entries.json", cleanBefore = true, cleanAfter = true)
-    public void getPsWithoutJsonAcceptHeaderFailed() throws Exception {
+    public void getPsWithoutJsonAcceptHeader() throws Exception {
         mockMvc.perform(get("/api/v1/ps/800000000001"))
-                .andExpect(status().is(415));
+                .andExpect(status().is(200));
     }
 
     @Test
