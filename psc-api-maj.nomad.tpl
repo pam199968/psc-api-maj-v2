@@ -1,0 +1,100 @@
+job "psc-api-maj-v2" {
+  datacenters = [
+    "dc1"]
+  type = service
+  vault {
+    policies = [
+      "psc-ecosystem"]
+    change_mode = "restart"
+  }
+
+  group "psc-api-maj-v2" {
+    count = "1"
+    restart {
+      attempts = 3
+      delay = "60s"
+      interval = "1h"
+      mode = "fail"
+    }
+
+    update {
+      max_parallel = 1
+      min_healthy_time = "30s"
+      progress_deadline = "5m"
+      healthy_deadline = "2m"
+    }
+
+    network {
+      port "http" {
+        to = 8080
+      }
+    }
+
+    task "pscload" {
+      driver = "docker"
+      config {
+        image = "${artifact.image}:${artifact.tag}"
+        ports = [
+          "http"]
+      }
+
+      template {
+        data = <<EOF
+spring.application.name=psc-api-maj
+server.servlet.context-path=/psc
+logging.level.org.springframework.data.mongodb.core.MongoTemplate=INFO
+server.error.include-stacktrace=never
+spring.data.mongodb.host={{ range service "psc-mongodb" }}{{ .Address }}{{ end }}
+spring.data.mongodb.port={{ range service "psc-mongodb" }}{{ .Port }}{{ end }}
+spring.data.mongodb.database=mongodb
+{{ with secret "psc-ecosystem/mongodb" }}spring.data.mongodb.username={{ .Data.data.root_user }}
+spring.data.mongodb.password={{ .Data.data.root_pass }}{{ end }}
+EOF
+        destination = "secrets/application.properties"
+        change_mode = "restart"
+      }
+
+      resources {
+        cpu = 2048
+        memory = 512
+      }
+
+
+      service {
+        name = "$\u007BNOMAD_JOB_NAME\u007D"
+        port = "http"
+        check {
+          type = "tcp"
+          port = "http"
+          interval = "30s"
+          timeout = "2s"
+          failures_before_critical = 5
+        }
+      }
+    }
+
+    task "log-shipper" {
+      driver = "docker"
+      restart {
+        interval = "30m"
+        attempts = 5
+        delay = "15s"
+        mode = "delay"
+      }
+      meta {
+        INSTANCE = "$\u007BNOMAD_ALLOC_NAME\u007D"
+      }
+      template {
+        data = <<EOH
+LOGSTASH_HOST = {{ range service "logstash" }}{{ .Address }}:{{ .Port }}{{ end }}
+ENVIRONMENT = "${datacenter}"
+EOH
+        destination = "local/file.env"
+        env = true
+      }
+      config {
+        image = "prosanteconnect/filebeat:7.14.2"
+      }
+    }
+  }
+}
