@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.jupiter.tools.spring.test.mongo.junit5.MongoDbExtension;
 import fr.ans.psc.PscApiMajApplication;
-import fr.ans.psc.utils.MemoryAppender;
+import fr.ans.psc.pscapimajv2.utils.MemoryAppender;
 import org.junit.Rule;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;

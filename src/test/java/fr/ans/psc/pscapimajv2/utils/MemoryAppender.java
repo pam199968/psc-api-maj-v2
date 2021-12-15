@@ -1,4 +1,4 @@
-package fr.ans.psc.utils;
+package fr.ans.psc.pscapimajv2.utils;
 
 import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.spi.ILoggingEvent;

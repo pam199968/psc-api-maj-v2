@@ -7,7 +7,7 @@ import com.jupiter.tools.spring.test.mongo.annotation.ExpectedMongoDataSet;
 import com.jupiter.tools.spring.test.mongo.annotation.MongoDataSet;
 import fr.ans.psc.delegate.ToggleApiDelegateImpl;
 import fr.ans.psc.repository.PsRefRepository;
-import fr.ans.psc.utils.MemoryAppender;
+import fr.ans.psc.pscapimajv2.utils.MemoryAppender;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
