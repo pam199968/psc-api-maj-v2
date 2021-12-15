@@ -30,6 +30,32 @@ job "psc-api-maj-v2" {
       }
     }
 
+    scaling {
+      enabled = true
+      min = 1
+      max = 5
+
+      policy {
+        check "few_requests" {
+          source = "prometheus"
+          query = "min(max(http_server_requests_seconds_max{_app='psc-api-maj-v2'}!= 0)by(instance))"
+          strategy "threshold" {
+            upper_bound = 50
+            delta = -1
+          }
+        }
+
+        check "many_requests" {
+          source = "prometheus"
+          query = "min(max(http_server_requests_seconds_max{_app='psc-api-maj-v2'}!= 0)by(instance))"
+          strategy "threshold" {
+            lower_bound = 20
+            delta = 1
+          }
+        }
+      }
+    }
+
     task "pscload" {
       driver = "docker"
       config {
@@ -39,9 +65,17 @@ job "psc-api-maj-v2" {
       }
 
       template {
+        destination = "local/file.env"
+        env = true
+        data = <<EOH
+JAVA_TOOL_OPTIONS="-Xms2g -Xmx2g -XX:+UseG1GC -Dspring.config.location=/secrets/application.properties -Dhttps.proxyHost=${proxy_host} -Dhttps.proxyPort=${proxy_port} -Dhttps.nonProxyHosts=${non_proxy_hosts}"
+EOH
+      }
+
+      template {
         data = <<EOF
 spring.application.name=psc-api-maj
-server.servlet.context-path=/psc
+server.servlet.context-path=/psc-api-maj
 logging.level.org.springframework.data.mongodb.core.MongoTemplate=INFO
 server.error.include-stacktrace=never
 spring.data.mongodb.host={{ range service "psc-mongodb" }}{{ .Address }}{{ end }}
@@ -55,7 +89,7 @@ EOF
       }
 
       resources {
-        cpu = 2048
+        cpu = 2176
         memory = 512
       }
 
@@ -70,6 +104,14 @@ EOF
           timeout = "2s"
           failures_before_critical = 5
         }
+      }
+
+      service {
+        name = "metrics-exporter"
+        port = "http"
+        tags = [
+          "_endpoint=/psc-api-maj/v1/actuator/prometheus",
+          "_app=psc-api-maj-v2",]
       }
     }
 

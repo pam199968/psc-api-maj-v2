@@ -1,7 +1,9 @@
 project = "psc-api-maj-v2"
 
 # Labels can be specified for organizational purposes.
-labels = { "domaine" = "psc" }
+labels = {
+  "domaine" = "psc"
+}
 
 runner {
   enabled = true
@@ -29,7 +31,7 @@ app "prosanteconnect/psc-api-maj-v2" {
     registry {
       use "docker" {
         image = "${var.registry_path}/psc-api-maj"
-        tag   = gitrefpretty()
+        tag = gitrefpretty()
         encoded_auth = filebase64("/secrets/dockerAuth.json")
       }
     }
