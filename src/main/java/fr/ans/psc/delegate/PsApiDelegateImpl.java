@@ -12,6 +12,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 @Service
@@ -29,15 +31,15 @@ public class PsApiDelegateImpl implements PsApiDelegate {
     }
 
     @Override
-    public ResponseEntity<Ps> getPsById(String psId) {
-
+    public ResponseEntity<Ps> getPsById(String encodedPsId) {
+        String psId = URLDecoder.decode(encodedPsId, StandardCharsets.UTF_8);
         PsRef psRef = psRefRepository.findPsRefByNationalIdRef(psId);
 
         // check if PsRef exists and is activated
         if (!ApiUtils.isPsRefActivated(psRef)) {
             String operationLog = psRef == null ? "No Ps found with nationalIdRef {}" : "Ps {} is deactivated";
             log.warn(operationLog, psId);
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(HttpStatus.GONE);
         }
 
         String nationalId = psRef.getNationalId();
@@ -101,7 +103,7 @@ public class PsApiDelegateImpl implements PsApiDelegate {
         PsRef storedPsRef = psRefRepository.findPsRefByNationalIdRef(ps.getNationalId());
         if (!ApiUtils.isPsRefActivated(storedPsRef)) {
             log.warn("No Ps found with nationalId {}, can not update it", ps.getNationalId());
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(HttpStatus.GONE);
         }
 
         // set technical id then update
@@ -116,11 +118,12 @@ public class PsApiDelegateImpl implements PsApiDelegate {
     }
 
     @Override
-    public ResponseEntity<Void> deletePsById(String psId) {
+    public ResponseEntity<Void> deletePsById(String encodedPsId) {
+        String psId = URLDecoder.decode(encodedPsId, StandardCharsets.UTF_8);
         PsRef storedPsRef = psRefRepository.findPsRefByNationalIdRef(psId);
         if (storedPsRef == null) {
             log.warn("No Ps found with nationalId {}, will not be deleted", psId);
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(HttpStatus.GONE);
         }
 
         // get all PsRefs that point to this ps
@@ -139,12 +142,13 @@ public class PsApiDelegateImpl implements PsApiDelegate {
     }
 
     @Override
-    public ResponseEntity<Void> forceDeletePsById(String psId) {
+    public ResponseEntity<Void> forceDeletePsById(String encodedPsId) {
+        String psId = URLDecoder.decode(encodedPsId, StandardCharsets.UTF_8);
         Ps ps = psRepository.findByNationalId(psId);
 
         if (ps == null) {
             log.warn("No Ps found with id {}, could not delete it", psId);
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(HttpStatus.GONE);
         }
 
         mongoTemplate.remove(ps);

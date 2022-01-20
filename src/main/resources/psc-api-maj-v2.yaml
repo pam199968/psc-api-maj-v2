@@ -16,7 +16,7 @@ tags:
   - name: toggle
     description: toggle
 paths:
-  /v1/ps:
+  /v2/ps:
     post:
       summary: Create new Ps
       tags:
@@ -88,7 +88,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-        '404':
+        '410':
           description: Not Found
       description: Update Ps
       requestBody:
@@ -134,7 +134,7 @@ paths:
         required: true
       tags:
         - ps
-  '/v1/ps/{psId}':
+  '/v2/ps/{psId}':
     parameters:
       - schema:
           type: string
@@ -194,7 +194,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-        '404':
+        '410':
           description: Not Found
       description: get a Ps by one of its idNationalRef
     delete:
@@ -211,10 +211,10 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-        '404':
+        '410':
           description: Not Found
       description: Delete a PS by its id
-  '/v1/ps/force/{psId}':
+  '/v2/ps/force/{psId}':
     parameters:
       - schema:
           type: string
@@ -235,10 +235,10 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-        '404':
+        '410':
           description: Not Found
       description: completely delete Ps (not only deactivate it)
-  /v1/structure:
+  /v2/structure:
     post:
       summary: Create new structure
       tags:
@@ -308,7 +308,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-        '404':
+        '410':
           description: Not Found
       description: Update structure
       requestBody:
@@ -345,7 +345,7 @@ paths:
                   oldStructureId: '101'
                   registrationAuthority: ARS/ARS/ARS
         required: true
-  '/v1/structure/{structureId}':
+  '/v2/structure/{structureId}':
     parameters:
       - schema:
           type: string
@@ -397,7 +397,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-        '404':
+        '410':
           description: Not Found
       operationId: get-structure-by-id
       description: Get structure by id
@@ -415,16 +415,20 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-        '404':
+        '410':
           description: Not Found
       description: Delete structure by structureId
-  /v1/toggle:
+  /v2/toggle:
     put:
       summary: toggle PsRef mapping
       operationId: toggle-psref
       responses:
         '200':
           description: OK
+          content:
+            text/plain:
+              schema:
+                type: string
         '400':
           description: Bad Request
           content:
@@ -433,8 +437,22 @@ paths:
                 $ref: '#/components/schemas/Error'
         '404':
           description: Not Found
+          content:
+            text/plain:
+              schema:
+                type: string
         '409':
           description: Conflict
+          content:
+            text/plain:
+              schema:
+                type: string
+        '410':
+          description: Gone
+          content:
+            text/plain:
+              schema:
+                type: string
       description: Toggle PsRef mapping
       requestBody:
         content:

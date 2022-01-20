@@ -1,7 +1,7 @@
 job "psc-api-maj-v2" {
   datacenters = [
     "${datacenter}"]
-  type = service
+  type = "service"
   vault {
     policies = [
       "psc-ecosystem"]
@@ -36,11 +36,12 @@ job "psc-api-maj-v2" {
       max = 5
 
       policy {
+        cooldown = "180s"
         check "few_requests" {
           source = "prometheus"
           query = "min(max(http_server_requests_seconds_max{_app='psc-api-maj-v2'}!= 0)by(instance))"
           strategy "threshold" {
-            upper_bound = 50
+            upper_bound = 2
             delta = -1
           }
         }
@@ -49,14 +50,14 @@ job "psc-api-maj-v2" {
           source = "prometheus"
           query = "min(max(http_server_requests_seconds_max{_app='psc-api-maj-v2'}!= 0)by(instance))"
           strategy "threshold" {
-            lower_bound = 20
+            lower_bound = 0.5
             delta = 1
           }
         }
       }
     }
 
-    task "pscload" {
+    task "psc-api-maj-v2" {
       driver = "docker"
       config {
         image = "${artifact.image}:${artifact.tag}"
@@ -68,7 +69,7 @@ job "psc-api-maj-v2" {
         destination = "local/file.env"
         env = true
         data = <<EOH
-JAVA_TOOL_OPTIONS="-Xms2g -Xmx2g -XX:+UseG1GC -Dspring.config.location=/secrets/application.properties -Dhttps.proxyHost=${proxy_host} -Dhttps.proxyPort=${proxy_port} -Dhttps.nonProxyHosts=${non_proxy_hosts}"
+JAVA_TOOL_OPTIONS="-Xms256m -Xmx1g -XX:+UseG1GC -Dspring.config.location=/secrets/application.properties"
 EOH
       }
 
@@ -83,19 +84,21 @@ spring.data.mongodb.port={{ range service "psc-mongodb" }}{{ .Port }}{{ end }}
 spring.data.mongodb.database=mongodb
 {{ with secret "psc-ecosystem/mongodb" }}spring.data.mongodb.username={{ .Data.data.root_user }}
 spring.data.mongodb.password={{ .Data.data.root_pass }}{{ end }}
+spring.data.mongodb.auto-index-creation=true
 EOF
         destination = "secrets/application.properties"
         change_mode = "restart"
       }
 
       resources {
-        cpu = 2176
-        memory = 512
+        cpu = 500
+        memory = 1280
       }
 
 
       service {
         name = "$\u007BNOMAD_JOB_NAME\u007D"
+        tags = ["urlprefix-/psc-api-maj"]
         port = "http"
         check {
           type = "tcp"
@@ -110,7 +113,7 @@ EOF
         name = "metrics-exporter"
         port = "http"
         tags = [
-          "_endpoint=/psc-api-maj/v1/actuator/prometheus",
+          "_endpoint=/psc-api-maj/v2/actuator/prometheus",
           "_app=psc-api-maj-v2",]
       }
     }
