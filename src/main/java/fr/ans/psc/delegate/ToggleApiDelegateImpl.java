@@ -28,31 +28,43 @@ public class ToggleApiDelegateImpl implements ToggleApiDelegate {
 
     @Override
     @Transactional
-    public ResponseEntity<Void> togglePsref(PsRef psRef) {
+    public ResponseEntity<String> togglePsref(PsRef psRef) {
         // STEP 1: check if Ps is already toggled
         PsRef storedPsRef = psRefRepository.findPsRefByNationalIdRef(psRef.getNationalIdRef());
-        if (storedPsRef.rawEquals(psRef)) {
-            log.info("PsRef {} already references Ps {}, no need to toggle", psRef.getNationalIdRef(), psRef.getNationalId());
-            return new ResponseEntity<>(HttpStatus.CONFLICT);
+        if (psRef.rawEquals(storedPsRef)) {
+            String result = String.format("PsRef %s already references Ps %s, no need to toggle",
+                    psRef.getNationalIdRef(), psRef.getNationalId());
+            log.info(result);
+            return new ResponseEntity<>(result, HttpStatus.CONFLICT);
+        } else if (storedPsRef == null) {
+            String result = String.format("No PsRef with id %s exists in database, no need to toggle",
+                    psRef.getNationalIdRef());
+            log.info(result);
+            return new ResponseEntity<>(result, HttpStatus.NOT_FOUND);
         }
 
         // STEP 2: check if targeted Ps exists
         Ps targetPs = psRepository.findByNationalId(psRef.getNationalId());
         if (targetPs == null) {
-            log.error("Could not toggle PsRef {} on Ps {} because this Ps does not exist", psRef.getNationalIdRef(), psRef.getNationalId());
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            String result = String.format("Could not toggle PsRef %s on Ps %s because this Ps does not exist",
+                    psRef.getNationalIdRef(), psRef.getNationalId());
+            log.error(result);
+            return new ResponseEntity<>(result, HttpStatus.GONE);
         }
 
         // STEP 3: PHYSICALLY DELETE OLD PS
         Ps oldPs = psRepository.findByNationalId(psRef.getNationalIdRef());
-        mongoTemplate.remove(oldPs);
-        log.info("Ps {} successfully removed", oldPs.getNationalId());
+        if (oldPs != null) {
+            mongoTemplate.remove(oldPs);
+            log.info("Ps {} successfully removed", oldPs.getNationalId());
+        }
 
         // STEP 4: UPDATE DEPRECATED PSREF
         storedPsRef.setNationalId(psRef.getNationalId());
         mongoTemplate.save(storedPsRef);
-        log.info("PsRef {} is now referencing Ps {}", storedPsRef.getNationalIdRef(), storedPsRef.getNationalId());
+        String result = String.format("PsRef %s is now referencing Ps %s", storedPsRef.getNationalIdRef(), storedPsRef.getNationalId());
+        log.info(result);
 
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(result, HttpStatus.OK);
     }
 }

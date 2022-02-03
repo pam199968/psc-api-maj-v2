@@ -88,7 +88,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-        '404':
+        '410':
           description: Not Found
       description: Update Ps
       requestBody:
@@ -194,7 +194,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-        '404':
+        '410':
           description: Not Found
       description: get a Ps by one of its idNationalRef
     delete:
@@ -211,7 +211,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-        '404':
+        '410':
           description: Not Found
       description: Delete a PS by its id
   '/v2/ps/force/{psId}':
@@ -235,7 +235,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-        '404':
+        '410':
           description: Not Found
       description: completely delete Ps (not only deactivate it)
   /v2/structure:
@@ -308,7 +308,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-        '404':
+        '410':
           description: Not Found
       description: Update structure
       requestBody:
@@ -397,7 +397,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-        '404':
+        '410':
           description: Not Found
       operationId: get-structure-by-id
       description: Get structure by id
@@ -415,7 +415,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-        '404':
+        '410':
           description: Not Found
       description: Delete structure by structureId
   /v2/toggle:
@@ -425,6 +425,10 @@ paths:
       responses:
         '200':
           description: OK
+          content:
+            text/plain:
+              schema:
+                type: string
         '400':
           description: Bad Request
           content:
@@ -433,8 +437,22 @@ paths:
                 $ref: '#/components/schemas/Error'
         '404':
           description: Not Found
+          content:
+            text/plain:
+              schema:
+                type: string
         '409':
           description: Conflict
+          content:
+            text/plain:
+              schema:
+                type: string
+        '410':
+          description: Gone
+          content:
+            text/plain:
+              schema:
+                type: string
       description: Toggle PsRef mapping
       requestBody:
         content:
